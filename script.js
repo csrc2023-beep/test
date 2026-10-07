@@ -183,6 +183,38 @@ const content = {
   login: '<h2>로그인</h2><div class="empty-content">로그인 기능은 준비 중입니다.</div>',
   join: '<h2>회원가입</h2><div class="empty-content">회원가입 기능은 준비 중입니다.</div>'
 };
+
+function renderBreadcrumb(page, title) {
+  const group = page?.group;
+  const categoryGroups = group?.key === "account" ? [...groups, group] : groups;
+  const arrow = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3 6 5 5 5-5"/></svg>';
+  const dropdown = (label, text, links) => '<details class="crumb-dropdown"><summary class="crumb-trigger" role="button" aria-expanded="false" aria-label="' + label + ': ' + escapeHTML(text) + '">' + escapeHTML(text) + arrow + '</summary><div class="crumb-options">' + links + '</div></details>';
+  const categoryLinks = categoryGroups.map(item => '<a href="#' + item.links[0].route + '"' + (item.key === group?.key ? ' aria-current="page"' : "") + '>' + escapeHTML(item.title) + '</a>').join("");
+  const pageLinks = (group?.links || []).map(item => '<a href="#' + item.route + '"' + (item.route === page?.route ? ' aria-current="page"' : "") + '>' + escapeHTML(item.title) + '</a>').join("");
+  $("#breadcrumbNav").innerHTML = '<a class="crumb-home" href="#home" aria-label="홈으로 이동"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5v2.5h-3v8h-5v-6h-2v6H6v-8H3z"/></svg></a>' + dropdown("상위 메뉴 선택", group?.title || "안내", categoryLinks) + (pageLinks ? dropdown("하위 메뉴 선택", title, pageLinks) : '<span class="crumb-trigger">' + escapeHTML(title) + '</span>');
+}
+const breadcrumbNav = $("#breadcrumbNav");
+breadcrumbNav.addEventListener("toggle", event => {
+  const details = event.target;
+  if (!details.matches(".crumb-dropdown")) return;
+  $("summary", details).setAttribute("aria-expanded", String(details.open));
+  if (details.open) $(".crumb-dropdown", breadcrumbNav).forEach(other => { if (other !== details) other.open = false; });
+}, true);
+document.addEventListener("click", event => {
+  if (!breadcrumbNav.contains(event.target)) $(".crumb-dropdown", breadcrumbNav).forEach(details => { details.open = false; });
+});
+breadcrumbNav.addEventListener("keydown", event => {
+  const details = event.target.closest(".crumb-dropdown");
+  if (!details) return;
+  const summary = $("summary", details), links = $("a", details);
+  if (event.key === "Escape") { event.preventDefault(); details.open = false; summary.focus(); return; }
+  if (!["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key) || !links.length) return;
+  event.preventDefault(); details.open = true;
+  const current = links.indexOf(event.target);
+  let next = event.key === "Home" ? 0 : event.key === "End" ? links.length - 1 : event.key === "ArrowDown" ? (current + 1) % links.length : (current < 0 ? links.length - 1 : (current - 1 + links.length) % links.length);
+  links[next].focus();
+});
+
 let renderedRoute;
 function renderPage(initial = false) {
   let route;
@@ -206,8 +238,7 @@ function renderPage(initial = false) {
     const title = page?.title || "페이지를 찾을 수 없습니다";
     $("#pageTitle").textContent = title;
     $("#pageCategory").textContent = page?.group.title || "CSDIC";
-    $("#crumbCategory").textContent = page?.group.title || "안내";
-    $("#crumbTitle").textContent = title;
+    renderBreadcrumb(page, title);
     $("#subnav").innerHTML = (page?.group.links || []).map(link => '<a href="#' + link.route + '"' + (link.route === route ? ' aria-current="page"' : "") + '>' + escapeHTML(link.title) + '</a>').join("");
     $("#pageContent").innerHTML = route === "business" ? businessContent(selectedProgram) : (Object.hasOwn(content, route) ? content[route] : "") || (page ? '<h2>' + escapeHTML(title) + '</h2><div class="empty-content">관련 자료를 준비 중입니다.</div>' : '<div class="empty-content">요청하신 페이지가 없습니다. <a href="#home">홈으로 이동</a></div>');
     document.title = title + " | CSDIC";

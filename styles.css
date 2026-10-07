@@ -35,3 +35,24 @@ html{scroll-behavior:smooth}body{margin:0;color:var(--text);font-family:'Noto Sa
 
 .business-detail--text{min-height:0;padding:38px 14px 48px}.business-detail--text .business-points{margin:0;line-height:1.65}
 @media(max-width:600px){.business-detail--text{padding:25px 17px 30px}}
+
+/* Page navigation in the upper left breadcrumb bar. */
+.inner-page .breadcrumb{position:relative;z-index:45;width:100%;margin:0;min-height:50px;padding:0 max(48px,calc((100% - 1280px)/2));background:#103568;color:#fff;border:0;gap:0}
+.inner-page .breadcrumb>.crumb-home{display:flex;align-items:center;justify-content:center;width:44px;min-height:50px;padding:0;border-left:1px solid #ffffff50;border-right:1px solid #ffffff50}
+.crumb-home svg{width:18px;height:18px;fill:currentColor}
+.inner-page .breadcrumb>.crumb-dropdown{position:relative;display:block;min-width:140px;min-height:50px;padding:0;border-right:1px solid #ffffff50}
+.inner-page .breadcrumb>.crumb-dropdown:last-child{min-width:180px}
+.crumb-trigger{display:flex;align-items:center;justify-content:space-between;gap:22px;min-height:50px;padding:0 16px;color:#fff;cursor:pointer;list-style:none;font-size:15px}
+.crumb-trigger::-webkit-details-marker{display:none}
+.crumb-trigger svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;flex-shrink:0}
+.crumb-dropdown[open]>.crumb-trigger{background:#17477d}
+.crumb-dropdown[open]>.crumb-trigger svg{transform:rotate(180deg)}
+.crumb-trigger:focus-visible{outline:3px solid #9eceff;outline-offset:-3px}
+.crumb-options{position:absolute;top:100%;left:-1px;min-width:100%;width:max-content;max-width:calc(100vw - 32px);background:#fff;color:#3b4c61;border:1px solid #dce2ea;box-shadow:0 6px 18px #102b5122;padding:4px 0}
+.crumb-options a{display:block;padding:11px 17px;font-size:15px;white-space:nowrap;line-height:1.5}
+.crumb-options a:hover,.crumb-options a:focus-visible{background:#edf4fc;color:#103568;outline-offset:-3px}
+.crumb-options a[aria-current=page]{background:#e8f0fb;color:#123e75;font-weight:700}
+@media(max-width:1550px){.inner-page .breadcrumb{padding-left:70px;padding-right:70px}}
+@media(min-width:1201px) and (max-width:1550px){.business-page .breadcrumb{padding-left:max(110px,calc((100% - 1200px)/2));padding-right:110px}}
+@media(max-width:1200px){.inner-page .breadcrumb{padding-left:24px;padding-right:24px}}
+@media(max-width:600px){.inner-page .breadcrumb{padding:0 16px;min-height:44px}.inner-page .breadcrumb>.crumb-home{width:38px;min-height:44px}.inner-page .breadcrumb>.crumb-dropdown{min-width:112px;min-height:44px}.inner-page .breadcrumb>.crumb-dropdown:last-child{min-width:140px}.crumb-trigger{min-height:44px;padding:0 10px;font-size:13px;gap:12px}.crumb-options a{font-size:14px;padding:10px 13px}}
