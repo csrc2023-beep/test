@@ -129,10 +129,13 @@ const businessPrograms = {
     "반도체 후공정·설계 관련 채용연계 프로그램 개발 및 운영"
   ], heading: "대학협력체계 (11개)", items: ["연세대학교", "경북대학교", "충남대학교", "서울시립대학교", "한밭대학교", "한국교통대학교", "성균관대학교", "전남대학교", "전북대학교", "부산대학교", "대구대학교"]},
   technology: {title: "기술개발", points: [
-    "화합물반도체 소자 및 집적회로 설계 기술 연구개발",
-    "GaAs/GaN 기반 고주파·고출력 회로 설계",
-    "설계, 검증 및 MPW를 통한 구현 지원"
-  ], heading: "연구개발 분야", items: ["GaAs", "GaN", "RF/MMIC", "MPW"]},
+  "참여교수, 대학(원)생 및 기업체에게 다양한 상용화 설계 서비스(MPW) 제공",
+  "대만 Winsemi 社(화합물반도체 파운드리)와 연계하여 전국 대학 및 기업에 설계기회 제공",
+  "화합물반도체 (GaN/GaAs 등) 기반 소자 개발 (원천기술)",
+  "고주파/고전력 화합물반도체 (GaN/GaAs 등) 기반 IC 설계 및 TEST기법",
+  "화합물반도체 (GaN/GaAs 등)와 연동 가능한 Si기반 IC설계 및 TEST기법",
+  "고주파/고전력 화합물반도체 패키지 및 bare-die 모델링/신뢰성/열해석"
+]},
   infrastructure: {title: "기반조성", points: [
     "화합물반도체 설계에 필요한 공동활용 인프라 구축",
     "EDA Tool 및 설계 환경 지원",
@@ -147,7 +150,7 @@ const businessPrograms = {
 function businessContent(key) {
   const program = businessPrograms[key];
   const tabs = Object.entries(businessPrograms).map(([id, item]) => '<a class="business-tab" id="program-tab-' + id + '" href="#business?program=' + id + '" role="tab" aria-selected="' + String(id === key) + '" aria-controls="businessDetail" tabindex="' + (id === key ? 0 : -1) + '">' + item.title + '</a>').join("");
-  return '<div class="business-tabs" role="tablist" aria-label="사업 분야">' + tabs + '</div><section class="business-detail" id="businessDetail" role="tabpanel" aria-labelledby="program-tab-' + key + '" tabindex="0"><ul class="business-points">' + program.points.map(text => '<li>' + escapeHTML(text) + '</li>').join("") + '</ul><h2 class="business-subtitle">' + program.heading + '</h2><div class="business-items">' + program.items.map(text => '<div>' + escapeHTML(text) + '</div>').join("") + '</div>' + (program.note ? '<p class="business-note">' + escapeHTML(program.note) + '</p>' : "") + '</section>';
+  return '<div class="business-tabs" role="tablist" aria-label="사업 분야">' + tabs + '</div><section class="business-detail' + (program.heading ? "" : " business-detail--text") + '" id="businessDetail" role="tabpanel" aria-labelledby="program-tab-' + key + '" tabindex="0"><ul class="business-points">' + program.points.map(text => '<li>' + escapeHTML(text) + '</li>').join("") + '</ul>' + (program.heading ? '<h2 class="business-subtitle">' + program.heading + '</h2>' : "") + (program.items?.length ? '<div class="business-items">' + program.items.map(text => '<div>' + escapeHTML(text) + '</div>').join("") + '</div>' : "") + (program.note ? '<p class="business-note">' + escapeHTML(program.note) + '</p>' : "") + '</section>';
 }
 $("#pageContent").addEventListener("keydown", event => {
   const tab = event.target.closest(".business-tab");
