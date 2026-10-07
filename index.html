@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20261007-9" />
+  <link rel="stylesheet" href="styles.css?v=20261007-10" />
 </head>
 <body>
   <a class="skip-link" href="#main">본문 바로가기</a>
@@ -30,12 +30,12 @@
           <article class="panel notice-panel">
             <div class="panel-head"><div class="notice-tabs" role="tablist" aria-label="새소식 분류"><button type="button" id="tab-notice" role="tab" aria-selected="true" aria-controls="notice-content" data-notice="notice">공지사항</button><span aria-hidden="true">/</span><button type="button" id="tab-recruit" role="tab" aria-selected="false" aria-controls="recruit-content" tabindex="-1" data-notice="recruit">인재채용</button><span aria-hidden="true">/</span><button type="button" id="tab-press" role="tab" aria-selected="false" aria-controls="press-content" tabindex="-1" data-notice="press">대외홍보</button></div><a class="more-link" id="noticeMore" href="#news" aria-label="공지사항 더 보기">+</a></div>
             <ul class="notice-list" id="notice-content" role="tabpanel" aria-labelledby="tab-notice"><li class="home-notice-empty">등록된 공지사항이 없습니다.</li></ul>
-            <div class="empty-notice" id="recruit-content" role="tabpanel" aria-labelledby="tab-recruit" hidden>등록된 채용 공고가 없습니다.</div>
-            <div class="empty-notice" id="press-content" role="tabpanel" aria-labelledby="tab-press" hidden>등록된 대외홍보 소식이 없습니다.</div>
+            <ul class="notice-list" id="recruit-content" role="tabpanel" aria-labelledby="tab-recruit" hidden><li class="home-notice-empty">등록된 채용 공고가 없습니다.</li></ul>
+            <ul class="notice-list" id="press-content" role="tabpanel" aria-labelledby="tab-press" hidden><li class="home-notice-empty">등록된 대외홍보 게시물이 없습니다.</li></ul>
           </article>
           <article class="panel gallery-panel"><div class="panel-head"><h2>행사갤러리</h2><a class="more-link" href="#gallery" aria-label="행사갤러리 더 보기">+</a></div>
-            <div class="gallery-viewport"><div class="gallery-track" id="galleryTrack"><a class="gallery-card" href="#gallery" data-index="0"><img class="gallery-photo" src="assets/event-1.png" width="155" height="139" alt="참고 화면의 산학협력 협약식 사진" /><span>산학협력 협약식</span></a><a class="gallery-card" href="#gallery" data-index="1"><img class="gallery-photo" src="assets/event-2.png" width="155" height="139" alt="참고 화면의 학술대회 참가 사진" /><span>학술대회 참가</span></a><a class="gallery-card" href="#gallery" data-index="2"><img class="gallery-photo" src="assets/event-3.png" width="155" height="139" alt="참고 화면의 학술행사 사진" /><span>학술행사</span></a><a class="gallery-card" href="#gallery" data-index="3"><img class="gallery-photo" src="assets/event-4.png" width="155" height="139" alt="참고 화면의 MPW 기술 세미나 사진" /><span>MPW 기술 세미나</span></a><a class="gallery-card" href="#gallery" data-index="4"><img class="gallery-photo" src="assets/event-5.png" width="155" height="139" alt="참고 화면의 설계 교육 사진" /><span>설계 교육</span></a></div><button type="button" class="gallery-control previous" id="galleryPrev" aria-label="이전 행사 사진"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m12 3-7 7 7 7"/></svg></button><button type="button" class="gallery-control next" id="galleryNext" aria-label="다음 행사 사진"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m8 3 7 7-7 7"/></svg></button></div>
-            <div class="gallery-dots" aria-label="행사 사진 순서"><button type="button" data-gallery-index="0" aria-label="행사 사진 1부터 보기" aria-current="true"></button><button type="button" data-gallery-index="1" aria-label="행사 사진 2부터 보기" aria-current="false"></button><button type="button" data-gallery-index="2" aria-label="행사 사진 3부터 보기" aria-current="false"></button><button type="button" data-gallery-index="3" aria-label="행사 사진 4부터 보기" aria-current="false"></button><button type="button" data-gallery-index="4" aria-label="행사 사진 5부터 보기" aria-current="false"></button></div>
+            <div class="gallery-viewport"><div class="gallery-track" id="galleryTrack"><div class="home-gallery-empty">등록된 행사 사진이 없습니다.</div></div><button type="button" class="gallery-control previous" id="galleryPrev" hidden aria-label="이전 행사 사진"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m12 3-7 7 7 7"/></svg></button><button type="button" class="gallery-control next" id="galleryNext" hidden aria-label="다음 행사 사진"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m8 3 7 7-7 7"/></svg></button></div>
+            <div class="gallery-dots" aria-label="행사 사진 순서"></div>
           </article>
         </div></div>
       </section>
@@ -62,8 +62,9 @@
   <button class="back-top" id="backTop" type="button" aria-label="페이지 맨 위로"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg></button>
   <div class="drawer-backdrop" id="drawerBackdrop" hidden></div><aside class="side-menu" id="sideMenu" role="dialog" aria-modal="true" aria-labelledby="drawerTitle" aria-hidden="true" inert><div class="side-head"><strong id="drawerTitle">전체 메뉴</strong><button id="menuClose" type="button" aria-label="메뉴 닫기">×</button></div><div class="side-tabs"><button type="button" data-panel="p-about" class="active">센터소개</button><button type="button" data-panel="p-research" class="">연구개발</button><button type="button" data-panel="p-education" class="">교육지원</button><button type="button" data-panel="p-mpw" class="">MPW</button><button type="button" data-panel="p-support" class="">기업지원</button><button type="button" data-panel="p-community" class="">커뮤니티</button><button type="button" data-panel="p-facility" class="">시설/장비</button></div><div class="side-panels"><div class="side-panel active" id="p-about"><a href="#vision">센터비전</a><a href="#business">사업소개</a><a href="#results">사업성과</a><a href="#ui">UI</a><a href="#org">조직도</a><a href="#location">오시는길</a></div><div class="side-panel " id="p-research"><a href="#research">연구개발소개</a><a href="#research-results">연구개발성과</a></div><div class="side-panel " id="p-education"><a href="#education">교육자료</a><a href="#education-apply">교육신청</a><a href="#education-inquiry">교육문의</a><a href="#online">온라인강의</a><a href="#extracurricular">비교과프로그램</a></div><div class="side-panel " id="p-mpw"><a href="#mpw">MPW참여안내</a><a href="#mpw-apply">MPW신청</a></div><div class="side-panel " id="p-support"><a href="#support">기업협업센터</a><a href="#recruit-program">채용연계프로그램</a></div><div class="side-panel " id="p-community"><a href="#news">공지사항</a><a href="#press">대외홍보</a><a href="#recruit">채용</a><a href="#gallery">갤러리</a><a href="#qna">Q&A</a></div><div class="side-panel " id="p-facility"><a href="#facility">EDA Tool</a><a href="#facility-guide">시설이용안내</a><a href="#equipment">장비/교육실현황</a><a href="#equipment-apply">장비/교육실신청</a></div></div></aside>
   <noscript><p class="noscript-message">메뉴별 페이지를 보려면 브라우저에서 자바스크립트를 켜주세요.</p></noscript>
-  <script src="notices.js?v=20261007-9"></script>
-  <script src="notice-board.js?v=20261007-9"></script>
-  <script src="script.js?v=20261007-9"></script>
+  <script src="notices.js?v=20261007-10"></script>
+  <script src="community-data.js?v=20261007-10"></script>
+  <script src="notice-board.js?v=20261007-10"></script>
+  <script src="script.js?v=20261007-10"></script>
 </body>
 </html>
