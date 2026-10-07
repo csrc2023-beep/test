@@ -183,8 +183,30 @@ $("#pageContent").addEventListener("keydown", event => {
   if (event.key === "End") next = tabs.length - 1;
   if (next !== undefined) { event.preventDefault(); location.hash = tabs[next].hash; }
 });
+function visionContent() {
+  const icons = {
+    people: '<circle cx="16" cy="7" r="4"/><path d="M9 22v-5a7 7 0 0 1 14 0v5M5 13a3 3 0 1 0 0-6M27 13a3 3 0 1 1 0-6M2 23v-5a5 5 0 0 1 5-5M30 23v-5a5 5 0 0 0-5-5M6 28h20M16 22v6"/>',
+    building: '<path d="M7 29V3h18v26M3 29h26M13 29v-7h6v7M12 8h1M19 8h1M12 13h1M19 13h1M12 18h1M19 18h1"/>',
+    network: '<rect x="11" y="2" width="10" height="7" rx="1"/><rect x="2" y="23" width="10" height="7" rx="1"/><rect x="20" y="23" width="10" height="7" rx="1"/><path d="M16 9v7M7 23v-7h18v7"/>',
+    pin: '<path d="M16 30S6 20 6 12a10 10 0 0 1 20 0c0 8-10 18-10 18Z"/><circle cx="16" cy="12" r="3"/>'
+  };
+  const goals = [
+    ["글로벌 강소기업 육성", "DC/AC 분야 10개사"],
+    ["화합물반도체 인력양성", "고교, 전문학사 및 학·석박사 1,000명"],
+    ["화합물반도체 중점 연구", "GaN / GaAs 기반 R&D 육성"]
+  ];
+  const strategies = [
+    {icon: "people", label: "인재양성", title: "초광역권 협력", points: ["대학 및 연구소 연합을 통한 산학협력", "화합물반도체 설계 전문인력 양성"]},
+    {icon: "building", label: "산업체 육성지원", title: "화합물 반도체", points: ["고전력/고주파 GaN/GaAs 기반 회로 설계 및 모듈 설계 지원", "후공정 패키지 및 TEST 지원"]},
+    {icon: "network", label: "인프라 구축", title: "시스템반도체/후공정", points: ["국내외 화합물반도체 설계 지원", "파운드리 연계 : Win-Semi"]},
+    {icon: "pin", label: "시장(지역연계)", title: "반도체 기업(유치/육성)", points: ["화합물 기반 반도체 회사 유치", "화합물반도체 관련 사업체 육성"]}
+  ];
+  return '<div class="vision-overview"><h2>국내 화합물반도체 설계 산업의 거점</h2><p>가천대학교 화합물 반도체 설계 센터<br><span lang="en">Compound Semiconductor Design and Implementation Center, CSDIC</span></p></div>' +
+    '<section class="vision-section" aria-labelledby="visionGoalsTitle"><h2 id="visionGoalsTitle">[ 목표 ]</h2><p class="vision-statement">화합물반도체 설계/제작/측정 및 평가 turn-key 기술지원체계 완비</p><div class="vision-goals">' + goals.map(([title, detail]) => '<article class="vision-goal"><h3>' + title + '</h3><p>(' + detail + ')</p></article>').join("") + '</div></section>' +
+    '<section class="vision-section" aria-labelledby="visionStrategyTitle"><h2 id="visionStrategyTitle">[ 추진전략 ]</h2><p class="vision-statement">화합물반도체 설계 기반 산업 생태계 조성</p><div class="vision-strategies">' + strategies.map(item => '<article class="vision-strategy"><div class="vision-strategy-label"><svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">' + icons[item.icon] + '</svg><span>' + item.label + '</span></div><div class="vision-strategy-body"><h3>' + item.title + '</h3><ul>' + item.points.map(point => '<li>' + point + '</li>').join("") + '</ul></div></article>').join("") + '</div></section>';
+}
 const content = {
-  vision: '<h2>화합물반도체 설계와 산업을 연결하는 전문센터</h2>' + lead("CSDIC는 화합물반도체 설계, MPW, 교육, EDA 및 기업지원 체계를 통해 연구성과가 실제 구현으로 이어질 수 있도록 지원합니다.") + '<div class="feature-grid">' + card("GaAs", "High Frequency") + card("GaN", "High Power") + card("RF", "MMIC Design") + card("MPW", "Implementation", "mpw") + '</div>',
+  vision: visionContent(),
   research: '<h2>연구개발소개</h2>' + lead("화합물반도체 소자 및 집적회로 설계 기술을 연구합니다.") + '<div class="feature-grid">' + card("GaAs/GaN 소자", "고주파 및 고출력 화합물반도체 소자 설계") + card("RF/MMIC 설계", "RF 및 마이크로파 집적회로 설계") + '</div>',
   education: '<h2>설계교육부터 MPW까지</h2>' + lead("교육, 설계, 검증, 제작으로 이어지는 지원 체계를 구축합니다.") + '<div class="feature-grid">' + card("설계 교육", "GaAs/GaN, RF/MMIC 설계 및 실무 중심 전문교육", "education-apply", "교육신청 안내") + card("온라인강의", "온라인 교육자료 및 강의 안내", "online", "온라인강의 보기") + '</div>',
   mpw: '<h2>MPW 참여안내</h2>' + lead("화합물반도체 설계와 검증, 제작을 위한 MPW 지원 프로그램입니다.") + '<div class="feature-grid">' + card("MPW 신청", "신청 관련 안내를 확인하세요.", "mpw-apply", "신청 안내 보기") + card("설계 지원", "설계에 필요한 EDA Tool과 시설 안내를 확인하세요.", "facility", "EDA Tool 안내") + '</div>',
@@ -243,9 +265,10 @@ function renderPage(initial = false) {
   $("#homePage").hidden = !home;
   $("#innerPage").hidden = home;
   $("#innerPage").classList.toggle("business-page", route === "business");
+  $("#innerPage").classList.toggle("vision-page", route === "vision");
   const isBoard = Object.hasOwn(communityBoards, route);
   $("#innerPage").classList.toggle("notice-page", isBoard);
-  $(".page-banner").classList.toggle("wrap", route === "business" || isBoard);
+  $(".page-banner").classList.toggle("wrap", route === "business" || route === "vision" || isBoard);
   if (home) {
     document.title = "CSDIC | " + centerName;
     highlightMenu(null);
