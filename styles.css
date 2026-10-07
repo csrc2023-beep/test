@@ -19,3 +19,5 @@ html{scroll-behavior:smooth}body{margin:0;color:var(--text);font-family:'Noto Sa
 .reference-banner{background:#03265b url(assets/banner-strip.png) center/cover no-repeat}.gallery-photo{display:block;height:auto;object-fit:cover}.apply-strip{background:#03184f url(assets/apply-background.png) center/cover no-repeat}
 
 .mega-grid{width:min(1480px,calc(100% - 48px));max-width:none;margin:0 auto}.mega-col{padding:26px 23px}.mega-col.active{background:#2853a4}
+/* Place the working gallery controls over the controls visible in the reference. */
+.gallery-control{top:calc((100% - 34px) * .375 - 18px)}.gallery-control.previous{left:3px}.gallery-control.next{right:5px}
