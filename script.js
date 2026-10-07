@@ -31,7 +31,7 @@ function closeMega(immediate = false) {
     megaMenu.setAttribute("aria-hidden", "true");
     navLinks.forEach(a => a.setAttribute("aria-expanded", "false"));
     megaCols.forEach(col => col.classList.remove("active"));
-    const current = routes[location.hash.slice(1)];
+    const current = routes[location.hash.slice(1).split("?")[0]];
     highlightMenu(current?.group.key);
   };
   if (immediate) close(); else closeTimer = setTimeout(close, 150);
@@ -121,11 +121,49 @@ const programs = [
   ["기반조성", "EDA, 측정, 분석 및 공동활용 인프라 구축", "facility"],
   ["기업지원", "기술자문, 시제품, 시험·평가 및 산학협력 지원", "support"]
 ];
-const programCards = '<div class="feature-grid">' + programs.map(item => card(...item)).join("") + '</div>';
+const businessPrograms = {
+  workforce: {title: "인력양성", points: [
+    "GaN 및 GaAs 기반 설계 및 Package & Test(후공정) 전문인력 양성",
+    "고교, 전문대학, 학사·석사·박사 프로그램 설계",
+    "재직자 대상 화합물반도체 기반 MMIC 및 EDA Tool 교육",
+    "반도체 후공정·설계 관련 채용연계 프로그램 개발 및 운영"
+  ], heading: "교육기관", items: ["가천대학교"], note: address},
+  technology: {title: "기술개발", points: [
+    "화합물반도체 소자 및 집적회로 설계 기술 연구개발",
+    "GaAs/GaN 기반 고주파·고출력 회로 설계",
+    "설계, 검증 및 MPW를 통한 구현 지원"
+  ], heading: "연구개발 분야", items: ["GaAs", "GaN", "RF/MMIC", "MPW"]},
+  infrastructure: {title: "기반조성", points: [
+    "화합물반도체 설계에 필요한 공동활용 인프라 구축",
+    "EDA Tool 및 설계 환경 지원",
+    "측정·분석 및 장비·교육실 공동활용 지원"
+  ], heading: "공동활용 인프라", items: ["EDA Tool", "측정·분석", "장비", "교육실"]},
+  enterprise: {title: "기업지원", points: [
+    "GaN/GaAs 기반 IC 설계 및 기업 기술지원",
+    "기술자문, 시제품 및 시험·평가 지원",
+    "모델링 및 산학협력 지원"
+  ], heading: "기업지원 분야", items: ["IC 설계", "기술자문", "시험·평가", "모델링"]}
+};
+function businessContent(key) {
+  const program = businessPrograms[key];
+  const tabs = Object.entries(businessPrograms).map(([id, item]) => '<a class="business-tab" id="program-tab-' + id + '" href="#business?program=' + id + '" role="tab" aria-selected="' + String(id === key) + '" aria-controls="businessDetail" tabindex="' + (id === key ? 0 : -1) + '">' + item.title + '</a>').join("");
+  return '<div class="business-tabs" role="tablist" aria-label="사업 분야">' + tabs + '</div><section class="business-detail" id="businessDetail" role="tabpanel" aria-labelledby="program-tab-' + key + '" tabindex="0"><ul class="business-points">' + program.points.map(text => '<li>' + escapeHTML(text) + '</li>').join("") + '</ul><h2 class="business-subtitle">' + program.heading + '</h2><div class="business-items">' + program.items.map(text => '<div>' + escapeHTML(text) + '</div>').join("") + '</div>' + (program.note ? '<p class="business-note">' + escapeHTML(program.note) + '</p>' : "") + '</section>';
+}
+$("#pageContent").addEventListener("keydown", event => {
+  const tab = event.target.closest(".business-tab");
+  if (!tab) return;
+  const tabs = $$(".business-tab");
+  const index = tabs.indexOf(tab);
+  let next;
+  if (event.key === "ArrowRight") next = (index + 1) % tabs.length;
+  if (event.key === "ArrowLeft") next = (index + tabs.length - 1) % tabs.length;
+  if (event.key === "Home") next = 0;
+  if (event.key === "End") next = tabs.length - 1;
+  if (next !== undefined) { event.preventDefault(); location.hash = tabs[next].hash; }
+});
 const noticeEntries = $$(".notice-list li").map(li => ({text: $("span", li).textContent, date: $("time", li).textContent, route: $("a", li).hash}));
 const content = {
   vision: '<h2>화합물반도체 설계와 산업을 연결하는 전문센터</h2>' + lead("CSDIC는 화합물반도체 설계, MPW, 교육, EDA 및 기업지원 체계를 통해 연구성과가 실제 구현으로 이어질 수 있도록 지원합니다.") + '<div class="feature-grid">' + card("GaAs", "High Frequency") + card("GaN", "High Power") + card("RF", "MMIC Design") + card("MPW", "Implementation", "mpw") + '</div>',
-  business: '<h2>주요사업</h2>' + lead("화합물반도체 설계와 구현을 위한 핵심 지원 프로그램입니다.") + programCards,
   research: '<h2>연구개발소개</h2>' + lead("화합물반도체 소자 및 집적회로 설계 기술을 연구합니다.") + '<div class="feature-grid">' + card("GaAs/GaN 소자", "고주파 및 고출력 화합물반도체 소자 설계") + card("RF/MMIC 설계", "RF 및 마이크로파 집적회로 설계") + '</div>',
   education: '<h2>설계교육부터 MPW까지</h2>' + lead("교육, 설계, 검증, 제작으로 이어지는 지원 체계를 구축합니다.") + '<div class="feature-grid">' + card("설계 교육", "GaAs/GaN, RF/MMIC 설계 및 실무 중심 전문교육", "education-apply", "교육신청 안내") + card("온라인강의", "온라인 교육자료 및 강의 안내", "online", "온라인강의 보기") + '</div>',
   mpw: '<h2>MPW 참여안내</h2>' + lead("화합물반도체 설계와 검증, 제작을 위한 MPW 지원 프로그램입니다.") + '<div class="feature-grid">' + card("MPW 신청", "신청 관련 안내를 확인하세요.", "mpw-apply", "신청 안내 보기") + card("설계 지원", "설계에 필요한 EDA Tool과 시설 안내를 확인하세요.", "facility", "EDA Tool 안내") + '</div>',
@@ -142,15 +180,21 @@ const content = {
   login: '<h2>로그인</h2><div class="empty-content">로그인 기능은 준비 중입니다.</div>',
   join: '<h2>회원가입</h2><div class="empty-content">회원가입 기능은 준비 중입니다.</div>'
 };
+let renderedRoute;
 function renderPage(initial = false) {
   let route;
-  try { route = decodeURIComponent(location.hash.slice(1)); } catch { route = "home"; }
+  const [rawRoute, rawQuery = ""] = location.hash.slice(1).split("?");
+  const requestedProgram = new URLSearchParams(rawQuery).get("program");
+  const selectedProgram = Object.hasOwn(businessPrograms, requestedProgram) ? requestedProgram : "workforce";
+  try { route = decodeURIComponent(rawRoute); } catch { route = "home"; }
   if (route === "main") return;
   if (!route || route === "top") route = "home";
   closeDrawer(); closeMega(true);
   const home = route === "home";
   $("#homePage").hidden = !home;
   $("#innerPage").hidden = home;
+  $("#innerPage").classList.toggle("business-page", route === "business");
+  $(".page-banner").classList.toggle("wrap", route === "business");
   if (home) {
     document.title = "CSDIC | " + centerName;
     highlightMenu(null);
@@ -162,16 +206,18 @@ function renderPage(initial = false) {
     $("#crumbCategory").textContent = page?.group.title || "안내";
     $("#crumbTitle").textContent = title;
     $("#subnav").innerHTML = (page?.group.links || []).map(link => '<a href="#' + link.route + '"' + (link.route === route ? ' aria-current="page"' : "") + '>' + escapeHTML(link.title) + '</a>').join("");
-    $("#pageContent").innerHTML = (Object.hasOwn(content, route) ? content[route] : "") || (page ? '<h2>' + escapeHTML(title) + '</h2><div class="empty-content">관련 자료를 준비 중입니다.</div>' : '<div class="empty-content">요청하신 페이지가 없습니다. <a href="#home">홈으로 이동</a></div>');
+    $("#pageContent").innerHTML = route === "business" ? businessContent(selectedProgram) : (Object.hasOwn(content, route) ? content[route] : "") || (page ? '<h2>' + escapeHTML(title) + '</h2><div class="empty-content">관련 자료를 준비 중입니다.</div>' : '<div class="empty-content">요청하신 페이지가 없습니다. <a href="#home">홈으로 이동</a></div>');
     document.title = title + " | CSDIC";
     highlightMenu(page?.group.key);
   }
   // Only the selected page is visible; menu clicks never scroll between sections.
   scrollTo({top: 0, left: 0, behavior: "instant"});
   if (!initial) {
-    const heading = home ? $("#newsTitle") : $("#pageTitle");
-    heading.tabIndex = -1; heading.focus({preventScroll: true});
+    const target = route === "business" && renderedRoute === "business" ? $(".business-tab[aria-selected=\"true\"]") : home ? $("#newsTitle") : $("#pageTitle");
+    if (!target.classList.contains("business-tab")) target.tabIndex = -1;
+    target.focus({preventScroll: true});
   }
+  renderedRoute = route;
 }
 addEventListener("hashchange", () => renderPage());
 renderPage(true);
