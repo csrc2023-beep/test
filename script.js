@@ -1,3 +1,4 @@
+if ("scrollRestoration" in history) history.scrollRestoration = "manual";
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 const escapeHTML = value => String(value).replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[char]);
@@ -50,7 +51,7 @@ function openDrawer() {
   closeMega(true); sideMenu.inert = false; sideMenu.classList.add("open");
   sideMenu.setAttribute("aria-hidden", "false"); backdrop.hidden = false;
   document.body.classList.add("menu-open"); menuOpen.setAttribute("aria-expanded", "true");
-  menuClose.focus();
+  requestAnimationFrame(() => menuClose.focus());
 }
 function closeDrawer(restoreFocus = false) {
   if (!sideMenu.classList.contains("open")) return;
