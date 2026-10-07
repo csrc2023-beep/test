@@ -164,7 +164,8 @@ $("#pageContent").addEventListener("keydown", event => {
   if (event.key === "End") next = tabs.length - 1;
   if (next !== undefined) { event.preventDefault(); location.hash = tabs[next].hash; }
 });
-const noticeEntries = $$(".notice-list li").map(li => ({text: $("span", li).textContent, date: $("time", li).textContent, route: $("a", li).hash}));
+const noticeBoard = window.CSDICNoticeBoard.create(window.CSDIC_NOTICES);
+$("#notice-content").innerHTML = noticeBoard.homeHTML();
 const content = {
   vision: '<h2>화합물반도체 설계와 산업을 연결하는 전문센터</h2>' + lead("CSDIC는 화합물반도체 설계, MPW, 교육, EDA 및 기업지원 체계를 통해 연구성과가 실제 구현으로 이어질 수 있도록 지원합니다.") + '<div class="feature-grid">' + card("GaAs", "High Frequency") + card("GaN", "High Power") + card("RF", "MMIC Design") + card("MPW", "Implementation", "mpw") + '</div>',
   research: '<h2>연구개발소개</h2>' + lead("화합물반도체 소자 및 집적회로 설계 기술을 연구합니다.") + '<div class="feature-grid">' + card("GaAs/GaN 소자", "고주파 및 고출력 화합물반도체 소자 설계") + card("RF/MMIC 설계", "RF 및 마이크로파 집적회로 설계") + '</div>',
@@ -174,7 +175,6 @@ const content = {
   facility: '<h2>EDA Tool</h2>' + lead("화합물반도체 설계를 위한 EDA, 측정, 분석 및 공동활용 인프라를 지원합니다.") + '<div class="feature-grid">' + card("시설이용안내", "공동활용 시설의 이용 안내를 확인하세요.", "facility-guide") + card("장비/교육실현황", "장비 및 교육실 안내를 확인하세요.", "equipment") + '</div>',
   ui: '<h2>CSDIC</h2><div class="logo-showcase"><img src="assets/csdic-logo.png" width="708" height="105" alt="CSDIC Compound Semiconductor Design and Implementation Center"></div><p>화합물 반도체 설계 센터<br>Compound Semiconductor Design and Implementation Center</p>',
   location: '<div class="address-card"><h2>가천대학교</h2><address>' + address + '</address><a class="map-link" href="https://map.naver.com/p/search/' + encodeURIComponent(address) + '" target="_blank" rel="noopener noreferrer">지도에서 위치 보기</a></div>',
-  news: '<h2>공지사항</h2><ul class="article-list">' + noticeEntries.map(item => '<li><a href="' + item.route + '"><time>2026-' + item.date + '</time><span>' + escapeHTML(item.text) + '</span></a></li>').join("") + '</ul>',
   gallery: '<h2>행사갤러리</h2><div class="photo-grid">' + originalGallery.map(html => html.replace('href="#gallery"', 'href="#home"')).join("") + '</div><p class="reference-note">보내주신 참고 화면의 행사 사진으로 구성되었습니다.</p>',
   "education-apply": '<h2>교육신청</h2>' + lead("GaAs/GaN, RF/MMIC 설계 교육 프로그램") + '<div class="empty-content">교육 일정 및 신청 안내를 준비 중입니다.</div>',
   "mpw-apply": '<h2>MPW신청</h2><div class="empty-content">MPW 접수 일정 및 신청 안내를 준비 중입니다.</div>',
@@ -229,7 +229,8 @@ function renderPage(initial = false) {
   $("#homePage").hidden = !home;
   $("#innerPage").hidden = home;
   $("#innerPage").classList.toggle("business-page", route === "business");
-  $(".page-banner").classList.toggle("wrap", route === "business");
+  $("#innerPage").classList.toggle("notice-page", route === "news");
+  $(".page-banner").classList.toggle("wrap", route === "business" || route === "news");
   if (home) {
     document.title = "CSDIC | " + centerName;
     highlightMenu(null);
@@ -240,8 +241,9 @@ function renderPage(initial = false) {
     $("#pageCategory").textContent = page?.group.title || "CSDIC";
     renderBreadcrumb(page, title);
     $("#subnav").innerHTML = (page?.group.links || []).map(link => '<a href="#' + link.route + '"' + (link.route === route ? ' aria-current="page"' : "") + '>' + escapeHTML(link.title) + '</a>').join("");
-    $("#pageContent").innerHTML = route === "business" ? businessContent(selectedProgram) : (Object.hasOwn(content, route) ? content[route] : "") || (page ? '<h2>' + escapeHTML(title) + '</h2><div class="empty-content">관련 자료를 준비 중입니다.</div>' : '<div class="empty-content">요청하신 페이지가 없습니다. <a href="#home">홈으로 이동</a></div>');
-    document.title = title + " | CSDIC";
+    const noticeView = route === "news" ? noticeBoard.render(rawQuery) : null;
+    $("#pageContent").innerHTML = noticeView ? noticeView.html : route === "business" ? businessContent(selectedProgram) : (Object.hasOwn(content, route) ? content[route] : "") || (page ? '<h2>' + escapeHTML(title) + '</h2><div class="empty-content">관련 자료를 준비 중입니다.</div>' : '<div class="empty-content">요청하신 페이지가 없습니다. <a href="#home">홈으로 이동</a></div>');
+    document.title = (noticeView?.title || title) + " | CSDIC";
     highlightMenu(page?.group.key);
   }
   // Only the selected page is visible; menu clicks never scroll between sections.
@@ -255,3 +257,19 @@ function renderPage(initial = false) {
 }
 addEventListener("hashchange", () => renderPage());
 renderPage(true);
+
+$("#pageContent").addEventListener("submit", event => {
+  if (event.target.id !== "noticeSearch") return;
+  event.preventDefault();
+  const params = new URLSearchParams();
+  const query = $("#noticeQuery").value.trim();
+  if (query) { params.set("q", query); params.set("field", $("#noticeField").value); }
+  location.hash = "news" + (params.toString() ? "?" + params.toString() : "");
+});
+$("#pageContent").addEventListener("click", async event => {
+  if (event.target.closest("[data-notice-print]")) { window.print(); return; }
+  if (!event.target.closest("[data-notice-copy]")) return;
+  const status = $("#noticeActionStatus");
+  try { await navigator.clipboard.writeText(location.href); if (status?.isConnected) status.textContent = "공지 링크를 복사했습니다."; }
+  catch { if (status?.isConnected) status.textContent = "주소창의 링크를 복사해 주세요."; }
+});
