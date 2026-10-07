@@ -198,15 +198,15 @@ breadcrumbNav.addEventListener("toggle", event => {
   const details = event.target;
   if (!details.matches(".crumb-dropdown")) return;
   $("summary", details).setAttribute("aria-expanded", String(details.open));
-  if (details.open) $(".crumb-dropdown", breadcrumbNav).forEach(other => { if (other !== details) other.open = false; });
+  if (details.open) $$(".crumb-dropdown", breadcrumbNav).forEach(other => { if (other !== details) other.open = false; });
 }, true);
 document.addEventListener("click", event => {
-  if (!breadcrumbNav.contains(event.target)) $(".crumb-dropdown", breadcrumbNav).forEach(details => { details.open = false; });
+  if (!breadcrumbNav.contains(event.target)) $$(".crumb-dropdown", breadcrumbNav).forEach(details => { details.open = false; });
 });
 breadcrumbNav.addEventListener("keydown", event => {
   const details = event.target.closest(".crumb-dropdown");
   if (!details) return;
-  const summary = $("summary", details), links = $("a", details);
+  const summary = $("summary", details), links = $$("a", details);
   if (event.key === "Escape") { event.preventDefault(); details.open = false; summary.focus(); return; }
   if (!["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key) || !links.length) return;
   event.preventDefault(); details.open = true;
