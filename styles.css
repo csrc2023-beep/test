@@ -96,3 +96,18 @@ html{scroll-behavior:smooth}body{margin:0;color:var(--text);font-family:'Noto Sa
 .vision-strategy-body li::before{content:'·';position:absolute;left:2px}
 @media(max-width:960px){.vision-strategies{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.vision-goals{gap:12px}.page-content .vision-statement{font-size:17px}.vision-goal h3{font-size:15px}.page-content .vision-goal p{font-size:14px}}
 @media(max-width:600px){.vision-overview{padding:17px 12px}.page-content .vision-overview h2{font-size:18px}.page-content .vision-overview p{font-size:13px;overflow-wrap:anywhere}.page-content .vision-section>h2{font-size:22px}.page-content .vision-statement{font-size:15px;padding:13px 8px}.vision-goals,.vision-strategies{grid-template-columns:1fr;gap:12px}.vision-goal{padding:15px 10px}.vision-strategy{gap:7px}.vision-strategy-body{min-height:0;padding:14px}.vision-strategy-label{min-height:54px}.vision-section+.vision-section{margin-top:28px}}
+
+/* Keep each dropdown column directly below its matching top-level menu. */
+@media(min-width:961px){
+  .nav-shell{--nav-inset:38px;--nav-gap:38px;--nav-brand:365px}
+  .main-nav{width:calc(100% - 2 * var(--nav-inset));gap:var(--nav-gap)}
+  .brand{width:var(--nav-brand)}
+  .mega-grid{width:min(1080px,calc(min(2200px,100% - 2 * var(--nav-inset)) - var(--nav-brand) - 48px - 2 * var(--nav-gap)));margin:0 calc(max(var(--nav-inset),(100% - 2200px)/2) + 48px + var(--nav-gap)) 0 auto}
+  .mega-col{padding:18px 5px 24px;text-align:center;border:0}
+  .mega-col:last-child{border:0}
+  .mega-col h3{display:none}
+  .mega-col a{padding:6px 2px;font-size:14px;line-height:1.5;letter-spacing:-.05em;overflow-wrap:anywhere}
+}
+@media(min-width:1700px){.nav-shell{--nav-gap:76px}}
+@media(min-width:961px) and (max-width:1550px){.nav-shell{--nav-inset:24px;--nav-gap:20px;--nav-brand:325px}}
+@media(min-width:961px) and (max-width:1200px){.nav-shell{--nav-gap:10px;--nav-brand:285px}.mega-col a{font-size:12px}}
