@@ -58,7 +58,7 @@
   }
   sound.addEventListener("click", () => {
     if (!ready) return;
-    const enableSound = player.isMuted();
+    const enableSound = sound.getAttribute("aria-pressed") !== "true";
     if (enableSound) { player.unMute(); player.setVolume(70); }
     else player.mute();
     // Player commands cross the iframe asynchronously; update the label from the requested state.
