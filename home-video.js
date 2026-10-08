@@ -7,8 +7,7 @@
   const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
   let player, ready = false, started = false, userPaused = reducedMotion.matches;
   const showStatus = text => { status.textContent = text; status.hidden = !text; };
-  function updateSound() {
-    const enabled = !player.isMuted();
+  function updateSound(enabled = !player.isMuted()) {
     sound.textContent = enabled ? "소리 끄기" : "소리 켜기";
     sound.setAttribute("aria-pressed", String(enabled));
   }
@@ -22,12 +21,13 @@
         ready = true;
         sound.disabled = playback.disabled = false;
         event.target.mute();
-        updateSound();
+        updateSound(false);
         showStatus("");
         if (!home.hidden && !userPaused) event.target.playVideo();
       },
       onStateChange: event => {
         updatePlayback(event.data === YT.PlayerState.PLAYING);
+        if (event.data === YT.PlayerState.BUFFERING && !home.hidden) showStatus("영상을 불러오는 중입니다.");
         if (event.data === YT.PlayerState.PLAYING) {
           if (home.hidden) event.target.pauseVideo();
           else showStatus("");
@@ -58,9 +58,11 @@
   }
   sound.addEventListener("click", () => {
     if (!ready) return;
-    if (player.isMuted()) { player.unMute(); player.setVolume(70); }
+    const enableSound = player.isMuted();
+    if (enableSound) { player.unMute(); player.setVolume(70); }
     else player.mute();
-    updateSound();
+    // Player commands cross the iframe asynchronously; update the label from the requested state.
+    updateSound(enableSound);
   });
   playback.addEventListener("click", () => {
     if (!ready) return;
