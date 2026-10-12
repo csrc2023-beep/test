@@ -10,7 +10,8 @@ let closeTimer;
 const groups = megaCols.map(col => ({key: col.dataset.col, title: $("h3", col).textContent, links: $$("a", col).map(a => ({route: a.hash.slice(1), title: a.textContent}))}));
 const routes = Object.create(null);
 groups.forEach(group => group.links.forEach(link => { routes[link.route] = {...link, group}; }));
-["login", "join"].forEach(route => { routes[route] = {route, title: route === "login" ? "로그인" : "회원가입", group: {key: "account", title: "회원 서비스", links: [{route: "login", title: "로그인"}, {route: "join", title: "회원가입"}]}}; });
+const accountLinks = [{route:"login",title:"로그인"},{route:"join",title:"회원가입"},{route:"reset",title:"비밀번호 찾기"},{route:"account",title:"내 회원정보"},{route:"resources",title:"회원 자료실"},{route:"member-admin",title:"회원 관리"}];
+accountLinks.forEach(link => {routes[link.route] = {...link,group:{key:"account",title:"회원 서비스",links:accountLinks.filter(item=>item.route!=="member-admin")}};});
 function highlightMenu(key) {
   navLinks.forEach(a => a.classList.toggle("active", a.dataset.menu === key));
   megaCols.forEach(col => col.classList.toggle("active", col.dataset.col === key));
@@ -266,9 +267,11 @@ function renderPage(initial = false) {
   $("#innerPage").hidden = home;
   $("#innerPage").classList.toggle("business-page", route === "business");
   $("#innerPage").classList.toggle("vision-page", route === "vision");
+  const isMember = window.CSDICMembers?.routes.has(route) || false;
+  $("#innerPage").classList.toggle("member-page", isMember);
   const isBoard = Object.hasOwn(communityBoards, route);
   $("#innerPage").classList.toggle("notice-page", isBoard);
-  $(".page-banner").classList.toggle("wrap", route === "business" || route === "vision" || isBoard);
+  $(".page-banner").classList.toggle("wrap", route === "business" || route === "vision" || isBoard || isMember);
   if (home) {
     document.title = "CSDIC | " + centerName;
     highlightMenu(null);
@@ -292,6 +295,7 @@ function renderPage(initial = false) {
     target.focus({preventScroll: true});
   }
   renderedRoute = route;
+  window.CSDICMembers?.render(route);
 }
 addEventListener("hashchange", () => renderPage());
 renderPage(true);
