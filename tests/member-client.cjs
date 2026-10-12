@@ -19,6 +19,7 @@ assert.equal(run({supabaseUrl:'https://attacker.example',publishableKey:'sb_publ
 const valid=run({supabaseUrl:url,publishableKey:'sb_publishable_demo'});
 assert.equal(valid.configured,true);
 assert.equal(valid.options.auth.detectSessionInUrl,false);
+assert.equal(valid.options.auth.flowType,'implicit');
 assert.equal(run({supabaseUrl:url,publishableKey:legacy('anon')}).configured,true);
 assert.equal(run({supabaseUrl:url,publishableKey:'sb_publishable_demo'},false).configured,false);
 console.log('PASS: missing configuration, secret keys, service-role keys, unsafe origins and unavailable storage fail closed.');

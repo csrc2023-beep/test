@@ -1,7 +1,7 @@
 # CSDIC 회원 서비스 연결
 
 현재 구성: 이메일 가입·인증 → 로그인 → 관리자 승인 → 문서별 권한 확인.
-프런트엔드와 서버 정책은 준비되어 있습니다. `member-config.js`의 연결 정보와 아래 서버 설정이 완료되기 전에는 가입·로그인 요청을 보내지 않습니다.
+연결 프로젝트: `csdic` (`ppomjjbwsunokbkauktk`), 서울 리전, Free 플랜. 홈페이지 연결 정보와 회원·문서 정책을 적용했습니다. 아래 메일 발송 설정과 최초 관리자 지정은 운영 전에 완료해야 합니다.
 
 ## 1. 프로젝트와 인증
 
@@ -11,7 +11,8 @@
 - URL Configuration의 Site URL을 `https://csdic.co.kr`로 설정합니다.
 - Redirect URL에 `https://csdic.co.kr/auth.html`을 등록합니다. `www` 주소를 따로 사용할 경우 정확한 `https://www.csdic.co.kr/auth.html`도 등록합니다. 와일드카드 대신 정확한 주소를 사용합니다.
 - 실제 외부 회원에게 인증 메일을 보내려면 사용자 정의 SMTP를 연결합니다. 기본 발송 서비스는 제한적인 테스트용이며 일반 가입자에게 정상 발송된다고 가정하면 안 됩니다.
-- 이메일 템플릿의 인증 링크는 아래와 같이 설정합니다. 브라우저가 달라도 인증할 수 있도록 일회용 token hash를 검증하며, 인증 페이지는 주소에서 토큰을 즉시 제거합니다.
+- 2026-06-03 이후 생성한 Free 프로젝트는 기본 SMTP 사용 중 이메일 템플릿을 편집할 수 없습니다. 현재 기본 템플릿과 호환되는 브라우저 인증을 사용합니다. 인증 페이지는 주소의 토큰을 즉시 제거하고 서버에서 사용자를 검증합니다. 세션은 해당 탭의 sessionStorage에만 저장합니다.
+- 사용자 정의 SMTP 연결 후 이메일 템플릿의 인증 링크를 아래와 같이 설정할 수 있습니다. 일회용 token hash 방식도 지원하며, 인증 페이지는 주소에서 토큰을 즉시 제거합니다.
 
 Confirm signup 템플릿 링크:
 
@@ -79,6 +80,8 @@ SDK 2.117.3은 `vendor/`에 고정하여 포함했습니다. 로그인 상태는
 
 로컬 PostgreSQL 정책 검증은 `npm ci` 후 `npm run test:members`로 실행합니다. 이 검증은 Supabase의 실제 SMTP·Auth·Storage HTTP 통합 검증을 대체하지 않습니다.
 
+2026-10-12 적용 검증: 실제 Supabase PostgreSQL에서도 가입 시 승인 대기, 비회원·미승인·미인증 접근 차단, 문서별 권한, 자기 권한 변경 차단, 관리자 승인, 기존 로그인 토큰의 이용 제한 반영을 확인했습니다. 검증용 데이터는 트랜잭션을 되돌려 남기지 않았습니다. Security Advisor 경고는 없습니다. 실제 이메일 발송·사용자 가입과 최초 관리자 계정은 별도 확인이 필요합니다.
+
 ## 운영 참고
 
 회원자료는 GitHub의 공개 폴더에 올리지 않습니다. 관리 화면에서만 비공개 저장소에 등록합니다. 이미 회원에게 전달된 파일 사본은 회수하거나 재공유를 완전히 방지할 수 없습니다.
@@ -90,3 +93,5 @@ SDK 2.117.3은 `vendor/`에 고정하여 포함했습니다. 로그인 상태는
 - https://supabase.com/docs/guides/storage/buckets/fundamentals
 - https://supabase.com/docs/guides/storage/security/access-control
 - https://supabase.com/docs/guides/getting-started/api-keys
+- https://supabase.com/docs/guides/auth/sessions/implicit-flow
+- https://supabase.com/changelog/46599-changes-to-email-template-customisation-on-free-tier

@@ -17,6 +17,7 @@
     if (error?.status === 429) return "요청이 많습니다. 잠시 후 다시 시도해 주세요.";
     if (error?.code === "email_not_confirmed") return "이메일 인증을 완료한 뒤 로그인해 주세요.";
     if (error?.code === "invalid_credentials") return "이메일 또는 비밀번호를 확인해 주세요.";
+    if (["email_address_not_authorized", "over_email_send_rate_limit", "unexpected_failure"].includes(error?.code)) return "인증 메일을 보내지 못했습니다. 잠시 후 다시 시도하거나 센터 관리자에게 문의해 주세요.";
     return "요청을 완료하지 못했습니다. 입력값과 연결 상태를 확인한 뒤 다시 시도해 주세요.";
   };
   const statusNames = {pending: "승인 대기", approved: "승인 완료", blocked: "이용 제한"};

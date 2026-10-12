@@ -30,6 +30,8 @@ create table if not exists public.member_document_grants (
   user_id uuid not null references auth.users(id) on delete cascade,
   primary key (document_id,user_id)
 );
+create index if not exists member_documents_created_by_idx on public.member_documents(created_by);
+create index if not exists member_document_grants_user_id_idx on public.member_document_grants(user_id);
 alter table public.memberships enable row level security;
 alter table public.member_documents enable row level security;
 alter table public.member_document_grants enable row level security;
@@ -78,9 +80,9 @@ revoke all on public.memberships from public, anon, authenticated;
 grant select on public.memberships to authenticated;
 drop policy if exists csdic_read_membership on public.memberships;
 create policy csdic_read_membership on public.memberships for select to authenticated
-  using (user_id=auth.uid() or private.is_member_admin());
+  using (user_id=(select auth.uid()) or (select private.is_member_admin()));
 
-create or replace function public.set_member_status(target_user uuid,new_status text) returns void
+create or replace function private.set_member_status(target_user uuid,new_status text) returns void
 language plpgsql security definer set search_path = '' as $$
 begin
   if not private.is_member_admin() then raise exception 'not authorized' using errcode='42501'; end if;
@@ -93,8 +95,21 @@ begin
   if not found then raise exception 'member not found'; end if;
 end;
 $$;
+revoke all on function private.set_member_status(uuid,text) from public, anon;
+grant execute on function private.set_member_status(uuid,text) to authenticated;
+-- The exposed RPC delegates to a private helper that checks the caller's live admin status.
+create or replace function public.set_member_status(target_user uuid,new_status text) returns void
+language sql security invoker set search_path = '' as $$
+  select private.set_member_status(target_user,new_status);
+$$;
 revoke all on function public.set_member_status(uuid,text) from public, anon;
 grant execute on function public.set_member_status(uuid,text) to authenticated;
+-- Supabase's automatic RLS event trigger is internal and must not be a public RPC.
+do $$ begin
+  if to_regprocedure('public.rls_auto_enable()') is not null then
+    execute 'revoke all on function public.rls_auto_enable() from public, anon, authenticated';
+  end if;
+end $$;
 
 revoke all on public.member_documents,public.member_document_grants from public, anon, authenticated;
 grant select,insert,update,delete on public.member_documents,public.member_document_grants to authenticated;
@@ -103,19 +118,26 @@ create policy csdic_document_read on public.member_documents for select to authe
   using (private.can_read_member_document(object_path));
 drop policy if exists csdic_document_insert on public.member_documents;
 create policy csdic_document_insert on public.member_documents for insert to authenticated
-  with check (private.is_member_admin() and created_by=auth.uid());
+  with check ((select private.is_member_admin()) and created_by=(select auth.uid()));
 drop policy if exists csdic_document_update on public.member_documents;
 create policy csdic_document_update on public.member_documents for update to authenticated
-  using (private.is_member_admin()) with check (private.is_member_admin());
+  using ((select private.is_member_admin())) with check ((select private.is_member_admin()));
 drop policy if exists csdic_document_delete on public.member_documents;
 create policy csdic_document_delete on public.member_documents for delete to authenticated
-  using (private.is_member_admin());
+  using ((select private.is_member_admin()));
 drop policy if exists csdic_grants_read on public.member_document_grants;
 create policy csdic_grants_read on public.member_document_grants for select to authenticated
-  using (private.is_member_admin() or (user_id=auth.uid() and private.is_approved_member()));
+  using ((select private.is_member_admin()) or (user_id=(select auth.uid()) and (select private.is_approved_member())));
 drop policy if exists csdic_grants_write on public.member_document_grants;
-create policy csdic_grants_write on public.member_document_grants for all to authenticated
-  using (private.is_member_admin()) with check (private.is_member_admin());
+drop policy if exists csdic_grants_insert on public.member_document_grants;
+create policy csdic_grants_insert on public.member_document_grants for insert to authenticated
+  with check ((select private.is_member_admin()));
+drop policy if exists csdic_grants_update on public.member_document_grants;
+create policy csdic_grants_update on public.member_document_grants for update to authenticated
+  using ((select private.is_member_admin())) with check ((select private.is_member_admin()));
+drop policy if exists csdic_grants_delete on public.member_document_grants;
+create policy csdic_grants_delete on public.member_document_grants for delete to authenticated
+  using ((select private.is_member_admin()));
 
 insert into storage.buckets(id,name,public,file_size_limit,allowed_mime_types)
 values('member-documents','member-documents',false,20971520,
@@ -128,23 +150,23 @@ create policy csdic_private_file_read on storage.objects for select to authentic
   using (bucket_id='member-documents' and private.can_read_member_document(name));
 drop policy if exists csdic_private_file_insert on storage.objects;
 create policy csdic_private_file_insert on storage.objects for insert to authenticated
-  with check (bucket_id='member-documents' and private.is_member_admin() and name ~ '^[a-f0-9-]{36}\.(pdf|docx|xlsx|pptx|txt|zip)$');
+  with check (bucket_id='member-documents' and (select private.is_member_admin()) and name ~ '^[a-f0-9-]{36}\.(pdf|docx|xlsx|pptx|txt|zip)$');
 drop policy if exists csdic_private_file_delete on storage.objects;
 create policy csdic_private_file_delete on storage.objects for delete to authenticated
-  using (bucket_id='member-documents' and private.is_member_admin());
+  using (bucket_id='member-documents' and (select private.is_member_admin()));
 -- Restrictive guards prevent any pre-existing permissive storage policy from bypassing this bucket.
 drop policy if exists csdic_bucket_guard_read on storage.objects;
 create policy csdic_bucket_guard_read on storage.objects as restrictive for select to public
   using (case when bucket_id='member-documents' then private.can_read_member_document(name) else true end);
 drop policy if exists csdic_bucket_guard_insert on storage.objects;
 create policy csdic_bucket_guard_insert on storage.objects as restrictive for insert to public
-  with check (case when bucket_id='member-documents' then private.is_member_admin()
+  with check (case when bucket_id='member-documents' then (select private.is_member_admin())
     and name ~ '^[a-f0-9-]{36}\.(pdf|docx|xlsx|pptx|txt|zip)$' else true end);
 drop policy if exists csdic_bucket_guard_update on storage.objects;
 create policy csdic_bucket_guard_update on storage.objects as restrictive for update to public
-  using (case when bucket_id='member-documents' then private.is_member_admin() else true end)
-  with check (case when bucket_id='member-documents' then private.is_member_admin() else true end);
+  using (case when bucket_id='member-documents' then (select private.is_member_admin()) else true end)
+  with check (case when bucket_id='member-documents' then (select private.is_member_admin()) else true end);
 drop policy if exists csdic_bucket_guard_delete on storage.objects;
 create policy csdic_bucket_guard_delete on storage.objects as restrictive for delete to public
-  using (case when bucket_id='member-documents' then private.is_member_admin() else true end);
+  using (case when bucket_id='member-documents' then (select private.is_member_admin()) else true end);
 commit;

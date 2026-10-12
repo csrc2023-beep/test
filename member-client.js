@@ -13,7 +13,9 @@
   if (configured && window.supabase?.createClient) {
     try {
       client = window.supabase.createClient(cfg.supabaseUrl, cfg.publishableKey, {
-        auth: {flowType: "pkce", detectSessionInUrl: false, persistSession: true,
+        // Static browser app: supports Supabase's fixed Free-plan email templates.
+        // auth.html consumes and removes callback tokens explicitly.
+        auth: {flowType: "implicit", detectSessionInUrl: false, persistSession: true,
           autoRefreshToken: true, storage: window.sessionStorage, storageKey: "csdic-member-session"}
       });
     } catch { /* Unavailable session storage must not create a fake logged-in state. */ }
