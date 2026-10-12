@@ -63,5 +63,13 @@ await as('anon',null,async()=>assert.equal((await db.query("select name from sto
 assert.equal((await db.query("select public from storage.buckets where id='member-documents'")).rows[0].public,false);
 await db.exec(sql); // Re-running the setup must retain approvals and keep the bucket private.
 assert.equal((await db.query('select status from memberships where user_id=$1',[ids.alice])).rows[0].status,'blocked');
+const grantedDocId=(await db.query("select id from member_documents where title='alice'")).rows[0].id;
+await as('authenticated',ids.bob,async()=>assert.equal((await db.query('delete from member_documents where id=$1 returning id',[grantedDocId])).rows.length,0));
+await as('authenticated',ids.admin,async()=>{
+ assert.equal((await db.query('update member_documents set published=false where id=$1 returning id',[grantedDocId])).rows.length,1);
+ assert.equal((await db.query('delete from storage.objects where bucket_id=\'member-documents\' and name=$1 returning id',[paths.alice])).rows.length,1);
+ assert.equal((await db.query('delete from member_documents where id=$1 returning id',[grantedDocId])).rows.length,1);
+});
+assert.equal((await db.query('select count(*)::int n from member_document_grants where document_id=$1',[grantedDocId])).rows[0].n,0);
 await db.close();
-console.log('PASS: anonymous, pending and unverified reads; per-document grants; self-escalation; uploads; revocation; existing broad policies; idempotence.');
+console.log('PASS: anonymous, pending and unverified reads; grants; self-escalation; uploads; revocation; broad policies; idempotence; admin-only deletion and grant cleanup.');

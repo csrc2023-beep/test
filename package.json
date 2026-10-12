@@ -1,6 +1,6 @@
 {
   "name": "csdic-homepage",
   "private": true,
-  "scripts": {"test:members": "node tests/member-security.mjs && node tests/member-client.cjs && node tests/auth-callback.cjs"},
+  "scripts": {"test:members": "node tests/member-security.mjs && node tests/member-client.cjs && node tests/auth-callback.cjs && node tests/member-document-actions.cjs"},
   "devDependencies": {"@electric-sql/pglite": "0.5.8"}
 }

@@ -92,7 +92,7 @@
     const [members, files] = await Promise.all([client.from("memberships").select("user_id,email,status,role,created_at").order("created_at", {ascending: false}), client.from("member_documents").select("id,title,published").order("created_at", {ascending: false})]);
     if (members.error || files.error) throw new Error("ADMIN_LOAD_FAILED");
     if (ticket !== view) return;
-    page.innerHTML = title("회원 및 문서 관리", "회원 승인을 처리하고 회원 전용 문서를 등록합니다.") + '<div class="member-admin-scroll"><table class="member-admin-table"><thead><tr><th>이메일</th><th>상태</th><th>회원 관리</th></tr></thead><tbody>' + members.data.map(m => '<tr><td>' + esc(m.email) + (m.role === "admin" ? ' <span class="member-state">관리자</span>' : "") + '</td><td>' + esc(statusNames[m.status]) + '</td><td>' + (m.role === "admin" ? "—" : '<select aria-label="' + esc(m.email) + ' 회원 상태" data-status-for="' + esc(m.user_id) + '">' + Object.entries(statusNames).map(([key, label]) => '<option value="' + key + '"' + (key === m.status ? " selected" : "") + '>' + label + '</option>').join("") + '</select><button class="member-secondary" data-save-member="' + esc(m.user_id) + '">변경 저장</button>') + '</td></tr>').join("") + '</tbody></table></div><section class="member-card member-upload"><h3>문서 등록</h3><form id="memberUploadForm"><label class="member-field">문서 제목<input name="title" required maxlength="160"></label><label class="member-field">설명<textarea name="description" maxlength="2000" rows="3"></textarea></label><label class="member-field">파일<input name="file" type="file" accept=".pdf,.docx,.xlsx,.pptx,.txt,.zip" required></label><label class="member-check"><input name="allMembers" type="checkbox" checked> 승인된 모든 회원에게 허용</label><label class="member-field" id="documentGrantees" hidden>특정 회원 선택<select name="grantees" multiple size="5">' + members.data.filter(m => m.status === "approved" && m.role !== "admin").map(m => '<option value="' + esc(m.user_id) + '">' + esc(m.email) + '</option>').join("") + '</select></label><p class="member-field-hint">PDF, Word, Excel, PowerPoint, TXT, ZIP · 최대 20 MB</p><button class="member-primary" type="submit">비공개 문서 등록</button></form></section><section class="member-card"><h3>등록 문서</h3>' + (files.data.length ? files.data.map(f => '<p>' + esc(f.title) + ' <button class="member-secondary" data-unpublish="' + esc(f.id) + '" data-published="' + String(f.published) + '">' + (f.published ? "열람 중지" : "열람 허용") + '</button></p>').join("") : '<p>등록된 문서가 없습니다.</p>') + '</section>' + statusLine;
+    page.innerHTML = title("회원 및 문서 관리", "회원 승인을 처리하고 회원 전용 문서를 등록합니다.") + '<div class="member-admin-scroll"><table class="member-admin-table"><thead><tr><th>이메일</th><th>상태</th><th>회원 관리</th></tr></thead><tbody>' + members.data.map(m => '<tr><td>' + esc(m.email) + (m.role === "admin" ? ' <span class="member-state">관리자</span>' : "") + '</td><td>' + esc(statusNames[m.status]) + '</td><td>' + (m.role === "admin" ? "—" : '<select aria-label="' + esc(m.email) + ' 회원 상태" data-status-for="' + esc(m.user_id) + '">' + Object.entries(statusNames).map(([key, label]) => '<option value="' + key + '"' + (key === m.status ? " selected" : "") + '>' + label + '</option>').join("") + '</select><button class="member-secondary" data-save-member="' + esc(m.user_id) + '">변경 저장</button>') + '</td></tr>').join("") + '</tbody></table></div><section class="member-card member-upload"><h3>문서 등록</h3><form id="memberUploadForm"><label class="member-field">문서 제목<input name="title" required maxlength="160"></label><label class="member-field">설명<textarea name="description" maxlength="2000" rows="3"></textarea></label><label class="member-field">파일<input name="file" type="file" accept=".pdf,.docx,.xlsx,.pptx,.txt,.zip" required></label><label class="member-check"><input name="allMembers" type="checkbox" checked> 승인된 모든 회원에게 허용</label><label class="member-field" id="documentGrantees" hidden>특정 회원 선택<select name="grantees" multiple size="5">' + members.data.filter(m => m.status === "approved" && m.role !== "admin").map(m => '<option value="' + esc(m.user_id) + '">' + esc(m.email) + '</option>').join("") + '</select></label><p class="member-field-hint">PDF, Word, Excel, PowerPoint, TXT, ZIP · 최대 20 MB</p><button class="member-primary" type="submit">비공개 문서 등록</button></form></section><section class="member-card"><h3>등록 문서</h3>' + (files.data.length ? files.data.map(f => '<p>' + esc(f.title) + ' <button class="member-secondary" data-unpublish="' + esc(f.id) + '" data-published="' + String(f.published) + '">' + (f.published ? "열람 중지" : "열람 허용") + '</button> <button type="button" class="member-danger" data-delete-document="' + esc(f.id) + '" data-document-title="' + esc(f.title) + '">삭제</button></p>').join("") : '<p>등록된 문서가 없습니다.</p>') + '</section>' + statusLine;
   }
   async function logout() {
     ++identity; ++view; clearFiles();
@@ -174,6 +174,24 @@
         const status = page.querySelector('[data-status-for="' + button.dataset.saveMember + '"]').value;
         const result = await client.rpc("set_member_status",{target_user:button.dataset.saveMember,new_status:status}); if (result.error) throw result.error;
         if (ticket === view) await render("member-admin"); message("회원 상태를 변경했습니다.");
+      } else if (button.dataset.deleteDocument) {
+        await refresh();
+        if (ticket !== view) return;
+        if (!isAdmin()) throw new Error("ACCESS_DENIED");
+        try {
+          const deleted = await window.CSDICMemberDocumentActions.deleteDocument(button.dataset.deleteDocument,button.dataset.documentTitle);
+          if (!deleted) return;
+          if (ticket === view) {
+            await render("member-admin");
+            if (currentRoute() === "member-admin") message("문서와 원본 파일을 삭제했습니다.");
+          }
+        } catch (error) {
+          if (!error.documentHidden) throw error;
+          if (ticket === view) {
+            await render("member-admin");
+            if (currentRoute() === "member-admin") message("삭제를 완료하지 못했습니다. 문서는 열람 중지 상태로 유지됩니다. 다시 삭제를 시도해 주세요.");
+          }
+        }
       } else if (button.dataset.unpublish) {
         const result = await client.from("member_documents").update({published:button.dataset.published !== "true"}).eq("id", button.dataset.unpublish); if (result.error) throw result.error;
         if (ticket === view) await render("member-admin"); message("문서 열람 상태를 변경했습니다.");
