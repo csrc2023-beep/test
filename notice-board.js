@@ -7,6 +7,9 @@
   };
   const emptyRow = text => '<tr><td colspan="4" class="notice-empty">' + escape(text) + '</td></tr>';
   function create(raw, options = {}) {
+    const media = options.media || {};
+    const mediaAsset = (id, kind) => Object.hasOwn(media, id) && media[id].kind === kind ? media[id] : null;
+    const picture = (path, alt, className = "") => mediaAsset(path, "image") ? '<img class="' + escape(className) + '" data-community-image="' + escape(path) + '" alt="' + escape(alt) + '" loading="lazy" />' : fileURL(path) ? '<img class="' + escape(className) + '" src="' + escape(fileURL(path)) + '" alt="' + escape(alt) + '" loading="lazy" />' : "";
     const routeName = ["news", "press", "recruit", "gallery", "qna"].includes(options.route) ? options.route : "news";
     const title = typeof options.title === "string" ? options.title : "공지사항";
     const emptyText = options.emptyText || "등록된 공지사항이 없습니다.";
@@ -28,6 +31,7 @@
       const totalPages = Math.max(1, Math.ceil(matches.length / pageSize));
       const page = Math.min(totalPages, Math.max(1, Number.parseInt(params.get("page"), 10) || 1));
       const listParams = new URLSearchParams();
+      if (params.get("drafts") === "1") listParams.set("drafts", "1");
       if (q) { listParams.set("q", q); listParams.set("field", field); }
       if (page > 1) listParams.set("page", page);
       return {params, q, field, matches, page, totalPages, listParams};
@@ -37,14 +41,14 @@
       if (!block || typeof block !== "object") return "";
       if (block.type === "heading") return '<h3>' + escape(block.text) + '</h3>';
       if (block.type === "list") { const tag = block.ordered ? "ol" : "ul"; return '<' + tag + '>' + (Array.isArray(block.items) ? block.items : []).map(item => '<li>' + escape(item) + '</li>').join("") + '</' + tag + '>'; }
-      if (block.type === "image") { const url = fileURL(block.src); return url ? '<figure><img src="' + escape(url) + '" alt="' + escape(block.alt || block.caption || "게시물 이미지") + '" loading="lazy" />' + (block.caption ? '<figcaption>' + escape(block.caption) + '</figcaption>' : "") + '</figure>' : ""; }
+      if (block.type === "image") { const img = picture(block.src, block.alt || block.caption || "게시물 이미지"); return img ? '<figure>' + img + (block.caption ? '<figcaption>' + escape(block.caption) + '</figcaption>' : "") + '</figure>' : ""; }
       if (block.type === "paragraph") return '<p>' + escape(block.text).replace(/\n/g, "<br />") + '</p>';
       return "";
     };
     function listHTML(s) {
       const select = [["all", "전체"], ["title", "제목"], ["body", "내용"]].map(([value, label]) => '<option value="' + value + '"' + (s.field === value ? ' selected' : "") + '>' + label + '</option>').join("");
-      const search = '<form class="notice-search" id="noticeSearch" role="search" data-board-route="' + routeName + '" aria-label="' + escape(title) + ' 검색"><label class="sr-only" for="noticeField">검색 범위</label><select id="noticeField" name="field">' + select + '</select><label class="sr-only" for="noticeQuery">검색어</label><input type="search" id="noticeQuery" name="q" maxlength="200" placeholder="검색어" value="' + escape(s.q) + '" /><button type="submit">검색</button><a class="notice-reset" href="#' + routeName + '">전체보기</a></form>';
-      const rows = s.matches.slice((s.page - 1) * pageSize, s.page * pageSize).map(item => '<tr' + (item.pinned ? ' class="pinned-notice"' : "") + '><td>' + (item.pinned ? '<span class="notice-pin">공지</span>' : String(notices.length - notices.indexOf(item))) + '</td><td class="notice-title-cell"><a href="' + escape(detailLink(item.id, s.listParams)) + '">' + (item.attachments.some(file => fileURL(file.path)) ? '<span class="attachment-mark" aria-label="첨부파일 있음">▤</span> ' : "") + escape(item.title) + '</a></td><td class="notice-author">' + escape(item.author) + '</td><td><time datetime="' + item.date + '">' + item.date + '</time></td></tr>').join("");
+      const search = '<form class="notice-search" id="noticeSearch" role="search" data-board-route="' + routeName + '" aria-label="' + escape(title) + ' 검색"><label class="sr-only" for="noticeField">검색 범위</label><select id="noticeField" name="field">' + select + '</select><label class="sr-only" for="noticeQuery">검색어</label><input type="search" id="noticeQuery" name="q" maxlength="200" placeholder="검색어" value="' + escape(s.q) + '" /><button type="submit">검색</button><a class="notice-reset" href="#' + routeName + (s.params.get("drafts") === "1" ? "?drafts=1" : "") + '">전체보기</a></form>';
+      const rows = s.matches.slice((s.page - 1) * pageSize, s.page * pageSize).map(item => '<tr' + (item.pinned ? ' class="pinned-notice"' : "") + '><td>' + (item.pinned ? '<span class="notice-pin">공지</span>' : String(notices.length - notices.indexOf(item))) + '</td><td class="notice-title-cell"><a href="' + escape(detailLink(item.id, s.listParams)) + '">' + (item.attachments.some(file => fileURL(file.path) || mediaAsset(file.path, "file")) ? '<span class="attachment-mark" aria-label="첨부파일 있음">▤</span> ' : "") + escape(item.title) + '</a></td><td class="notice-author">' + escape(item.author) + '</td><td><time datetime="' + item.date + '">' + item.date + '</time></td></tr>').join("");
       const pageLink = (page, label, current = false) => { const p = new URLSearchParams(s.listParams); if (page === 1) p.delete("page"); else p.set("page", page); return '<a href="' + escape(route(p)) + '"' + (current ? ' aria-current="page"' : "") + ' aria-label="' + escape(label) + '">' + escape(label) + '</a>'; };
       const start = Math.max(1, Math.min(s.page - 2, s.totalPages - 4));
       let pagination = s.page > 1 ? pageLink(1, "처음") + pageLink(s.page - 1, "이전") : "";
@@ -53,8 +57,8 @@
       return search + '<p class="notice-count" role="status">전체게시물 <strong>' + notices.length + '</strong>' + (s.q ? ' / 검색결과 <strong>' + s.matches.length + '</strong>' : "") + ' / 현재페이지 <strong>' + s.page + '</strong></p><table class="notice-table"><caption class="sr-only">' + escape(title) + ' 게시물 목록</caption><thead><tr><th scope="col">번호</th><th scope="col">제목</th><th scope="col">작성자</th><th scope="col">날짜</th></tr></thead><tbody>' + (rows || emptyRow(s.q ? "검색 결과가 없습니다." : emptyText)) + '</tbody></table><nav class="notice-pagination" aria-label="' + escape(title) + ' 목록 페이지">' + pagination + '</nav>';
     }
     const imageHTML = (item, className) => {
-      const src = fileURL(item.thumbnail) || fileURL(item.body.find(block => block.type === "image")?.src);
-      return src ? '<img class="' + className + '" src="' + escape(src) + '" alt="' + escape(item.title) + '" loading="lazy" />' : '<div class="' + className + ' gallery-image-empty">이미지 준비 중</div>';
+      const path = item.thumbnail || item.body.find(block => block.type === "image")?.src;
+      return picture(path, item.title, className) || '<div class="' + className + ' gallery-image-empty">이미지 준비 중</div>';
     };
     function galleryHTML(s) {
       const cards = s.matches.slice((s.page - 1) * pageSize, s.page * pageSize).map(item => '<article class="community-gallery-card"><a href="' + escape(detailLink(item.id, s.listParams)) + '">' + imageHTML(item, "community-gallery-photo") + '<h2>' + escape(item.title) + '</h2><p>' + escape(item.author) + ' | <time datetime="' + item.date + '">' + item.date + '</time></p></a></article>').join("");
@@ -62,7 +66,7 @@
       return listHTML(s).replace(/<table class="notice-table">[\s\S]*?<\/table>/, () => grid);
     }
     function detailHTML(item, s) {
-      const attachments = item.attachments.filter(file => fileURL(file.path)).map(file => '<li><a href="' + escape(fileURL(file.path)) + '" download><span aria-hidden="true">▤</span> ' + escape(file.name || file.path.split("/").pop()) + '</a></li>').join("");
+      const attachments = item.attachments.filter(file => fileURL(file.path) || mediaAsset(file.path, "file")).map(file => '<li>' + (mediaAsset(file.path, "file") ? '<button type="button" class="community-download" data-community-download="' + escape(file.path) + '">' : '<a href="' + escape(fileURL(file.path)) + '" download>') + '<span aria-hidden="true">▤</span> ' + escape(file.name || file.path.split("/").pop()) + (mediaAsset(file.path, "file") ? '</button>' : '</a>') + '</li>').join("");
       const index = s.matches.indexOf(item);
       const adjacent = (label, neighbor) => '<div><span>' + label + '</span>' + (neighbor ? '<a href="' + escape(detailLink(neighbor.id, s.listParams)) + '">' + escape(neighbor.title) + '</a>' : '<span class="no-adjacent">' + label + '이 없습니다.</span>') + '</div>';
       return '<article class="notice-article" aria-labelledby="noticeArticleTitle"><h2 id="noticeArticleTitle">' + escape(item.title) + '</h2><div class="notice-meta"><span>작성자: ' + escape(item.author) + '</span><span>게시일: <time datetime="' + item.date + '">' + item.date + '</time></span><div class="notice-tools"><button type="button" data-notice-print aria-label="게시물 인쇄">인쇄</button><button type="button" data-notice-copy>링크 복사</button></div></div>' + (attachments ? '<div class="notice-attachments"><strong>첨부파일</strong><ul>' + attachments + '</ul></div>' : "") + '<div class="notice-body">' + item.body.map(blockHTML).join("") + '</div><nav class="notice-adjacent" aria-label="이전 및 다음 게시물">' + adjacent("이전 글", index >= 0 ? s.matches[index - 1] : null) + adjacent("다음 글", index >= 0 ? s.matches[index + 1] : null) + '</nav><div class="notice-footer"><a class="notice-list-button" href="' + escape(route(s.listParams)) + '">목록</a><p id="noticeActionStatus" role="status"></p></div></article>';

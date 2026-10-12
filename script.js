@@ -117,7 +117,7 @@ $("#press-content").innerHTML = communityBoards.press.homeHTML();
 
 const galleryTrack = $("#galleryTrack");
 galleryTrack.innerHTML = communityBoards.gallery.homeGalleryHTML();
-const originalGallery = $$(".gallery-card", galleryTrack).map(card => card.outerHTML);
+let originalGallery = $$(".gallery-card", galleryTrack).map(card => card.outerHTML);
 $("#galleryPrev").hidden = originalGallery.length < 2;
 $("#galleryNext").hidden = originalGallery.length < 2;
 $(".gallery-dots").innerHTML = originalGallery.length > 1 ? originalGallery.map((_, index) => '<button type="button" data-gallery-index="' + index + '" aria-label="행사 사진 ' + (index + 1) + '부터 보기" aria-current="' + String(index === 0) + '"></button>').join("") : "";
@@ -126,11 +126,23 @@ function showGallery(index) {
   if (!originalGallery.length) return;
   galleryIndex = (index + originalGallery.length) % originalGallery.length;
   galleryTrack.innerHTML = [...originalGallery.slice(galleryIndex), ...originalGallery.slice(0, galleryIndex)].join("");
+  window.CSDICCommunityUI?.observeImages(galleryTrack);
   $$("[data-gallery-index]").forEach(button => button.setAttribute("aria-current", String(Number(button.dataset.galleryIndex) === galleryIndex)));
 }
 $("#galleryPrev").addEventListener("click", () => showGallery(galleryIndex - 1));
 $("#galleryNext").addEventListener("click", () => showGallery(galleryIndex + 1));
-$$("[data-gallery-index]").forEach(button => button.addEventListener("click", () => showGallery(Number(button.dataset.galleryIndex))));
+$(".gallery-dots").addEventListener("click", event => {
+  const button=event.target.closest("[data-gallery-index]");
+  if(button) showGallery(Number(button.dataset.galleryIndex));
+});
+window.CSDICHomeGallery=Object.freeze({setHTML(html) {
+  galleryTrack.innerHTML=html;
+  originalGallery=$$(".gallery-card",galleryTrack).map(card=>card.outerHTML);
+  galleryIndex=0;
+  $("#galleryPrev").hidden=$("#galleryNext").hidden=originalGallery.length<2;
+  $(".gallery-dots").innerHTML=originalGallery.length>1?originalGallery.map((_,index)=>'<button type="button" data-gallery-index="'+index+'" aria-label="행사 사진 '+(index+1)+'부터 보기" aria-current="'+String(index===0)+'"></button>').join(""):"";
+  window.CSDICCommunityUI?.observeImages(galleryTrack);
+}});
 $("#backTop").addEventListener("click", () => scrollTo({top: 0, behavior: matchMedia("(prefers-reduced-motion:reduce)").matches ? "instant" : "smooth"}));
 
 const lead = text => '<div class="content-lead"><p>' + text + '</p></div>';
@@ -260,6 +272,7 @@ function renderPage(initial = false) {
   const selectedProgram = Object.hasOwn(businessPrograms, requestedProgram) ? requestedProgram : "workforce";
   try { route = decodeURIComponent(rawRoute); } catch { route = "home"; }
   if (route === "main") return;
+  window.CSDICCommunityUI?.stop();
   if (!route || route === "top") route = "home";
   closeDrawer(); closeMega(true);
   const home = route === "home";
@@ -296,6 +309,8 @@ function renderPage(initial = false) {
   }
   renderedRoute = route;
   window.CSDICMembers?.render(route);
+  if (home) window.CSDICCommunityUI?.renderHome();
+  else window.CSDICCommunityUI?.render(route,rawQuery);
 }
 addEventListener("hashchange", () => renderPage());
 renderPage(true);
@@ -307,6 +322,7 @@ $("#pageContent").addEventListener("submit", event => {
   const query = $("#noticeQuery").value.trim();
   if (query) { params.set("q", query); params.set("field", $("#noticeField").value); }
   const boardRoute = event.target.dataset.boardRoute;
+  if (new URLSearchParams(location.hash.split("?")[1]||"").get("drafts")==="1") params.set("drafts","1");
   if (Object.hasOwn(communityBoards, boardRoute)) location.hash = boardRoute + (params.toString() ? "?" + params.toString() : "");
 });
 $("#pageContent").addEventListener("click", async event => {

@@ -1,0 +1,12 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const sandbox={window:{},URLSearchParams};vm.runInNewContext(fs.readFileSync('notice-board.js','utf8'),sandbox);
+const asset='20000000-0000-0000-0000-000000000001';
+const board=sandbox.window.CSDICNoticeBoard.create([{id:'10000000-0000-0000-0000-000000000001',title:'<script>alert(1)</script>',date:'2026-10-12',author:'관리자',body:[{type:'paragraph',text:'<img src=x onerror=alert(1)>'},{type:'image',src:asset,caption:'" onload="alert(1)'}],thumbnail:asset,attachments:[{path:asset,name:'test.pdf'}]}],{route:'gallery',layout:'gallery',media:{[asset]:{kind:'image'}}});
+const detail=board.render('id=10000000-0000-0000-0000-000000000001').html;
+assert.ok(detail.includes('data-community-image="'+asset+'"'));
+assert.ok(!detail.includes('<script>')&&!detail.includes('<img src=x'));
+assert.ok(!detail.includes(' onload="alert'));
+const other=sandbox.window.CSDICNoticeBoard.create([{id:'id',title:'unsafe',date:'2026-10-12',body:[{type:'image',src:'javascript:alert(1)'}],attachments:[{path:'../secret',name:'secret'}]}]);
+assert.ok(!other.render('id=id').html.includes('javascript:alert'));
+assert.ok(!other.render('id=id').html.includes('href="../secret"'));
+console.log('PASS: board HTML escapes input and rejects untrusted file paths.');
