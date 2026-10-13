@@ -2,7 +2,7 @@ if ("scrollRestoration" in history) history.scrollRestoration = "manual";
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 const escapeHTML = value => String(value).replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[char]);
-const centerName = "화합물 반도체 설계 센터";
+const centerName = "화합물 반도체설계 지원센터";
 const address = "경기 성남시 수정구 성남대로 1342 가천대학교";
 const menuOpen = $("#menuOpen"), menuClose = $("#menuClose"), sideMenu = $("#sideMenu"), backdrop = $("#drawerBackdrop"), megaMenu = $("#megaMenu");
 const navLinks = $$(".nav-link"), megaCols = $$(".mega-col");
@@ -148,36 +148,36 @@ $("#backTop").addEventListener("click", () => scrollTo({top: 0, behavior: matchM
 const lead = text => '<div class="content-lead"><p>' + text + '</p></div>';
 const card = (title, text, route, label = "자세히 보기") => '<article class="feature-card"><h3>' + title + '</h3><p>' + text + '</p>' + (route ? '<a href="#' + route + '">' + label + '</a>' : "") + '</article>';
 const programs = [
-  ["인력양성", "GaAs/GaN, RF/MMIC 설계 및 실무 중심 전문교육", "education"],
-  ["기술개발", "화합물반도체 소자 및 집적회로 설계 기술 연구개발", "research"],
-  ["기반조성", "EDA, 측정, 분석 및 공동활용 인프라 구축", "facility"],
-  ["기업지원", "기술자문, 시제품, 시험·평가 및 산학협력 지원", "support"]
+  ["인력양성", "회로 설계와 EDA 실습, MPW 프로젝트를 연계한 전문인력 양성", "education"],
+  ["기술개발", "화합물반도체 회로 설계, 검증 및 측정 데이터 기반 기술 지원", "research"],
+  ["기반조성", "EDA 설계환경과 공동활용 기반, 설계·측정 데이터 관리체계 조성", "facility"],
+  ["기업지원", "설계 자문, MPW 제작 연계 및 시제품 검증을 위한 산학협력 지원", "support"]
 ];
 const businessPrograms = {
   workforce: {title: "인력양성", points: [
-    "GaN 및 GaAs 기반 설계 및 Package & Test(후공정) 전문인력 양성",
-    "고교, 전문대학, 학사·석사·박사 프로그램 설계",
-    "재직자 대상 화합물반도체 기반 MMIC 및 EDA Tool 교육",
-    "반도체 후공정·설계 관련 채용연계 프로그램 개발 및 운영"
-  ], heading: "대학협력체계 (11개)", items: ["연세대학교", "경북대학교", "충남대학교", "서울시립대학교", "한밭대학교", "한국교통대학교", "성균관대학교", "전남대학교", "전북대학교", "부산대학교", "대구대학교"]},
+    "화합물반도체 회로 설계의 기초 이론과 실무를 연결하는 교육과정 운영 추진",
+    "ADS·Cadence 등 EDA 도구를 활용한 회로 설계 및 레이아웃 실습",
+    "PDK 활용, DRC/LVS 검증과 MPW 제출 과정을 다루는 설계 프로젝트 교육",
+    "대학·기업과 연계한 기술교류 및 재직자 설계교육 지원"
+  ], heading: "설계교육 주요 분야", items: ["전자회로 기초", "RF 회로 설계", "MMIC 설계", "ADS 실습", "Cadence 실습", "전자기 해석", "PDK 활용", "DRC·LVS 검증", "MPW 설계", "측정 결과 해석", "프로젝트 실습"]},
   technology: {title: "기술개발", points: [
-  "참여교수, 대학(원)생 및 기업체에게 다양한 상용화 설계 서비스(MPW) 제공",
-  "대만 Winsemi 社(화합물반도체 파운드리)와 연계하여 전국 대학 및 기업에 설계기회 제공",
-  "화합물반도체 (GaN/GaAs 등) 기반 소자 개발 (원천기술)",
-  "고주파/고전력 화합물반도체 (GaN/GaAs 등) 기반 IC 설계 및 TEST기법",
-  "화합물반도체 (GaN/GaAs 등)와 연동 가능한 Si기반 IC설계 및 TEST기법",
-  "고주파/고전력 화합물반도체 패키지 및 bare-die 모델링/신뢰성/열해석"
-]},
+    "GaN·GaAs 등 화합물반도체 기반 고주파·고출력 회로 설계 기술 지원",
+    "파운드리 PDK를 활용한 회로 시뮬레이션 및 레이아웃 설계 검토",
+    "DRC/LVS 사전 검증과 제출 규격 검토를 통한 MPW 제작 준비 지원",
+    "레티클 설계와 Fab-in 제출을 위한 파운드리 연계 업무 추진",
+    "소자 및 회로 측정 결과를 활용한 모델링 검토와 설계 개선 지원",
+    "설계·검증 사례와 IP 정보를 축적하는 기술지원 기반 마련"
+  ]},
   infrastructure: {title: "기반조성", points: [
-    "화합물반도체 설계에 필요한 공동활용 인프라 구축",
-    "EDA Tool 및 설계 환경 지원",
-    "측정·분석 및 장비·교육실 공동활용 지원"
-  ], heading: "공동활용 인프라", items: ["EDA Tool", "측정·분석", "장비", "교육실"]},
+    "화합물반도체 설계 연구와 교육을 위한 EDA 공동활용 환경 조성",
+    "참여기관의 설계 검증 및 측정·분석을 위한 협력기관 연계",
+    "설계·공정·측정 자료를 축적하고 활용하는 데이터 관리체계 마련"
+  ], heading: "공동활용 지원 기반", items: ["EDA 설계환경", "설계·검증 자료", "측정·분석 연계", "설계교육 공간"]},
   enterprise: {title: "기업지원", points: [
-    "GaN/GaAs 기반 IC 설계 및 기업 기술지원",
-    "기술자문, 시제품 및 시험·평가 지원",
-    "모델링 및 산학협력 지원"
-  ], heading: "기업지원 분야", items: ["IC 설계", "기술자문", "시험·평가", "모델링"]}
+    "기업의 기술 수요에 맞춘 화합물반도체 회로 설계 및 검증 자문",
+    "MPW 제작과 패키징·측정 연계를 통한 시제품 검증 지원",
+    "산학연 협력을 통한 후속 연구, 기술이전 및 사업화 연계 추진"
+  ], heading: "기업지원 분야", items: ["설계 자문", "MPW 제작 연계", "성능 검증 연계", "산학연 협력"]}
 };
 function businessContent(key) {
   const program = businessPrograms[key];
@@ -204,31 +204,41 @@ function visionContent() {
     pin: '<path d="M16 30S6 20 6 12a10 10 0 0 1 20 0c0 8-10 18-10 18Z"/><circle cx="16" cy="12" r="3"/>'
   };
   const goals = [
-    ["글로벌 강소기업 육성", "DC/AC 분야 10개사"],
-    ["화합물반도체 인력양성", "고교, 전문학사 및 학·석박사 1,000명"],
-    ["화합물반도체 중점 연구", "GaN / GaAs 기반 R&D 육성"]
+    ["설계·검증 역량 강화", "회로 설계, 레이아웃 검증 및 측정 결과 분석"],
+    ["MPW 연계 지원체계 구축", "참여기관의 설계 결과를 상용 파운드리 제작으로 연결"],
+    ["설계 전문인력 양성", "EDA 실습과 설계 프로젝트를 통한 현장 역량 확보"]
   ];
   const strategies = [
-    {icon: "people", label: "인재양성", title: "초광역권 협력", points: ["대학 및 연구소 연합을 통한 산학협력", "화합물반도체 설계 전문인력 양성"]},
-    {icon: "building", label: "산업체 육성지원", title: "화합물 반도체", points: ["고전력/고주파 GaN/GaAs 기반 회로 설계 및 모듈 설계 지원", "후공정 패키지 및 TEST 지원"]},
-    {icon: "network", label: "인프라 구축", title: "시스템반도체/후공정", points: ["국내외 화합물반도체 설계 지원", "파운드리 연계 : Win-Semi"]},
-    {icon: "pin", label: "시장(지역연계)", title: "반도체 기업(유치/육성)", points: ["화합물 기반 반도체 회사 유치", "화합물반도체 관련 사업체 육성"]}
+    {icon: "people", label: "인력양성", title: "설계 실무교육", points: ["회로 이론과 EDA 실습을 연계한 교육", "MPW 설계 사례를 활용한 프로젝트 교육"]},
+    {icon: "building", label: "기술지원", title: "설계·검증 지원", points: ["PDK 기반 회로 및 레이아웃 설계 지원", "DRC/LVS 검토와 측정 결과 분석 지원"]},
+    {icon: "network", label: "인프라 조성", title: "설계환경과 데이터", points: ["EDA 설계환경 및 공동활용 기반 조성", "설계·공정·측정 데이터의 체계적 축적"]},
+    {icon: "pin", label: "산학연 협력", title: "제작과 사업화 연계", points: ["MOSIS 업무협약과 국내외 협력기관 연계", "기술자문과 후속 연구·사업화 협력"]}
   ];
-  return '<div class="vision-overview"><h2>국내 화합물반도체 설계 산업의 거점</h2><p>가천대학교 화합물 반도체 설계 센터<br><span lang="en">Compound Semiconductor Design and Implementation Center, CSDIC</span></p></div>' +
-    '<section class="vision-section" aria-labelledby="visionGoalsTitle"><h2 id="visionGoalsTitle">[ 목표 ]</h2><p class="vision-statement">화합물반도체 설계/제작/측정 및 평가 turn-key 기술지원체계 완비</p><div class="vision-goals">' + goals.map(([title, detail]) => '<article class="vision-goal"><h3>' + title + '</h3><p>(' + detail + ')</p></article>').join("") + '</div></section>' +
-    '<section class="vision-section" aria-labelledby="visionStrategyTitle"><h2 id="visionStrategyTitle">[ 추진전략 ]</h2><p class="vision-statement">화합물반도체 설계 기반 산업 생태계 조성</p><div class="vision-strategies">' + strategies.map(item => '<article class="vision-strategy"><div class="vision-strategy-label"><svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">' + icons[item.icon] + '</svg><span>' + item.label + '</span></div><div class="vision-strategy-body"><h3>' + item.title + '</h3><ul>' + item.points.map(point => '<li>' + point + '</li>').join("") + '</ul></div></article>').join("") + '</div></section>';
+  return '<div class="vision-overview"><h2>화합물반도체 설계와 구현을 연결하는 지원 거점</h2><p>가천대학교 화합물 반도체설계 지원센터 CSDIC는 대학·연구기관·기업의 설계교육과 검증, MPW 제작 연계를 지원합니다. 모시스(MOSIS)와 업무협약(MOU)을 체결하고 국제협력 기반을 넓혀가고자 합니다.<br><span lang="en">Compound Semiconductor Design and Implementation Center, CSDIC</span></p></div>' +
+    '<section class="vision-section" aria-labelledby="visionGoalsTitle"><h2 id="visionGoalsTitle">[ 목표 ]</h2><p class="vision-statement">설계·검증·MPW 제작 연계를 통한 화합물반도체 설계 지원체계 구축</p><div class="vision-goals">' + goals.map(([title, detail]) => '<article class="vision-goal"><h3>' + title + '</h3><p>(' + detail + ')</p></article>').join("") + '</div></section>' +
+    '<section class="vision-section" aria-labelledby="visionStrategyTitle"><h2 id="visionStrategyTitle">[ 추진전략 ]</h2><p class="vision-statement">설계 경험과 검증 데이터를 축적하는 산학연 협력 기반 조성</p><div class="vision-strategies">' + strategies.map(item => '<article class="vision-strategy"><div class="vision-strategy-label"><svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">' + icons[item.icon] + '</svg><span>' + item.label + '</span></div><div class="vision-strategy-body"><h3>' + item.title + '</h3><ul>' + item.points.map(point => '<li>' + point + '</li>').join("") + '</ul></div></article>').join("") + '</div></section>';
 }
 const content = {
   vision: visionContent(),
-  research: '<h2>연구개발소개</h2>' + lead("화합물반도체 소자 및 집적회로 설계 기술을 연구합니다.") + '<div class="feature-grid">' + card("GaAs/GaN 소자", "고주파 및 고출력 화합물반도체 소자 설계") + card("RF/MMIC 설계", "RF 및 마이크로파 집적회로 설계") + '</div>',
-  education: '<h2>설계교육부터 MPW까지</h2>' + lead("교육, 설계, 검증, 제작으로 이어지는 지원 체계를 구축합니다.") + '<div class="feature-grid">' + card("설계 교육", "GaAs/GaN, RF/MMIC 설계 및 실무 중심 전문교육", "education-apply", "교육신청 안내") + card("온라인강의", "온라인 교육자료 및 강의 안내", "online", "온라인강의 보기") + '</div>',
-  mpw: '<h2>MPW 참여안내</h2>' + lead("화합물반도체 설계와 검증, 제작을 위한 MPW 지원 프로그램입니다.") + '<div class="feature-grid">' + card("MPW 신청", "신청 관련 안내를 확인하세요.", "mpw-apply", "신청 안내 보기") + card("설계 지원", "설계에 필요한 EDA Tool과 시설 안내를 확인하세요.", "facility", "EDA Tool 안내") + '</div>',
-  support: '<h2>기업협업센터</h2>' + lead("기술자문, 시제품, 시험·평가 및 산학협력을 지원합니다.") + '<div class="feature-grid">' + card("산학협력", "화합물반도체 설계 기술의 공동연구 및 기업협력") + card("채용연계프로그램", "채용연계프로그램 관련 안내", "recruit-program") + '</div>',
-  facility: '<h2>EDA Tool</h2>' + lead("화합물반도체 설계를 위한 EDA, 측정, 분석 및 공동활용 인프라를 지원합니다.") + '<div class="feature-grid">' + card("시설이용안내", "공동활용 시설의 이용 안내를 확인하세요.", "facility-guide") + card("장비/교육실현황", "장비 및 교육실 안내를 확인하세요.", "equipment") + '</div>',
-  ui: '<h2>CSDIC</h2><div class="logo-showcase"><img src="assets/csdic-logo.png" width="708" height="105" alt="CSDIC Compound Semiconductor Design and Implementation Center"></div><p>화합물 반도체 설계 센터<br>Compound Semiconductor Design and Implementation Center</p>',
-  location: '<div class="address-card"><h2>가천대학교</h2><address>' + address + '</address><a class="map-link" href="https://map.naver.com/p/search/' + encodeURIComponent(address) + '" target="_blank" rel="noopener noreferrer">지도에서 위치 보기</a></div>',
-  "education-apply": '<h2>교육신청</h2>' + lead("GaAs/GaN, RF/MMIC 설계 교육 프로그램") + '<div class="empty-content">교육 일정 및 신청 안내를 준비 중입니다.</div>',
-  "mpw-apply": '<h2>MPW신청</h2><div class="empty-content">MPW 접수 일정 및 신청 안내를 준비 중입니다.</div>',
+  research: '<h2>설계와 검증을 연결하는 화합물반도체 기술 지원</h2>' + lead("CSDIC는 화합물반도체 회로의 설계 결과가 제작과 성능 검증으로 이어질 수 있도록 설계 지원체계를 마련합니다. 파운드리 공정 특성을 반영한 설계 검토와 측정 데이터 분석을 통해 참여기관의 연구개발을 지원하고자 합니다.") + '<div class="feature-grid">' + card("RF·MMIC 설계 지원", "GaN·GaAs 기반 고주파·고출력 회로의 시뮬레이션과 레이아웃 설계를 지원하고, 공정 특성에 따른 설계 조건을 검토합니다.") + card("설계 검증 및 모델링", "DRC/LVS 검토와 소자·회로 측정 데이터 분석을 통해 설계 오류를 줄이고, 시뮬레이션과 실제 성능의 차이를 설계 개선에 활용합니다.") + '</div>',
+  education: '<h2>설계 실습과 MPW 경험을 연결하는 교육</h2>' + lead("회로 설계 이론과 EDA 실습을 바탕으로 화합물반도체 설계 역량을 기르는 교육을 추진합니다. 설계 검증과 제작 후 측정 사례를 교육에 반영하여 실제 설계 과정에 필요한 판단과 문제 해결 능력을 높이고자 합니다.") + '<div class="feature-grid">' + card("설계 실무교육", "회로 설계, PDK 활용 및 레이아웃 검증을 다루는 교육과 실습 프로그램을 안내합니다.", "education-apply", "교육신청 안내") + card("온라인 교육자료", "설계 이론과 도구 활용, MPW 설계 사례를 이해하는 데 필요한 교육자료와 강의를 안내합니다.", "online", "온라인강의 보기") + '</div>',
+  mpw: '<h2>설계 결과를 칩 제작으로 연결하는 MPW 지원</h2>' + lead("MPW는 여러 설계를 하나의 웨이퍼 제작에 함께 구성하여 칩 제작 기회를 제공하는 방식입니다. CSDIC는 참여기관의 설계 준비와 검증을 지원하고, 국내외 상용 파운드리와 연계하는 제작 지원체계를 추진합니다. 모시스(MOSIS)와 체결한 업무협약(MOU)을 바탕으로 국제협력 기반도 넓혀가고자 합니다.") + '<div class="feature-grid">' + card("MPW 모집 및 참여", "모집 공고에서 지원 대상, 공정, 제출 자료와 일정을 확인해 주세요. 선정 이후의 설계자료 제공과 제작 절차는 해당 회차 안내에 따릅니다.", "mpw-apply", "신청 안내 보기") + card("설계 준비 및 검증", "파운드리 PDK와 설계 규칙을 바탕으로 회로 및 레이아웃을 검토하고, DRC/LVS 검증과 제출 규격 확인을 지원합니다.", "facility", "EDA Tool 안내") + '</div>',
+  support: '<h2>기업의 설계 과제를 함께 해결하는 협력 지원</h2>' + lead("기업의 화합물반도체 설계 수요를 바탕으로 기술자문과 공동연구를 연계하고, MPW 제작 이후의 패키징·측정·검증을 협력기관과 연결하는 지원체계를 추진합니다.") + '<div class="feature-grid">' + card("설계 기술협력", "회로 설계, 레이아웃 검증 및 성능 분석 등 기업의 기술 과제에 맞춘 자문과 연구협력을 지원합니다.") + card("인력·교육 연계", "기업의 직무 수요를 반영한 설계교육과 산학협력 활동을 연계하여 전문인력의 현장 역량을 높이고자 합니다.", "recruit-program") + '</div>',
+  facility: '<h2>화합물반도체 설계를 위한 EDA 지원 기반</h2>' + lead("회로 시뮬레이션, 레이아웃 설계와 전자기 해석을 위한 EDA 공동활용 환경을 조성하고, 설계 연구와 실무교육을 연결하는 지원 기반을 마련합니다.") + '<div class="feature-grid">' + card("설계환경 이용안내", "지원 가능한 설계 도구와 이용 대상, 신청 절차를 안내합니다. 소프트웨어별 라이선스 조건과 이용 범위는 센터 운영 안내에 따릅니다.", "facility-guide") + card("시설 및 협력 장비 안내", "설계교육 공간과 공동활용 시설을 안내하고, 측정·분석이 필요한 경우 협력기관의 장비와 기술지원을 연계합니다.", "equipment") + '</div>',
+  ui: '<h2>CSDIC</h2><div class="logo-showcase"><img src="assets/csdic-logo.png" width="708" height="105" alt="CSDIC Compound Semiconductor Design and Implementation Center"></div><p>화합물 반도체설계 지원센터 CSDIC는 가천대학교를 기반으로 설계 연구와 교육, MPW 제작 연계를 지원하는 센터입니다.<br>Compound Semiconductor Design and Implementation Center</p>',
+  location: '<div class="address-card"><h2>가천대학교 화합물 반도체설계 지원센터 CSDIC</h2><address>' + address + '</address><a class="map-link" href="https://map.naver.com/p/search/' + encodeURIComponent(address) + '" target="_blank" rel="noopener noreferrer">지도에서 위치 보기</a></div>',
+  "education-apply": '<h2>교육신청</h2>' + lead("화합물반도체 설계교육의 일정, 대상 및 신청방법을 안내합니다.") + '<div class="empty-content">교육 일정과 신청방법은 공지사항을 통해 안내합니다. 과정별 교육 내용과 참여 조건을 확인한 뒤 신청해 주세요.</div>',
+  "mpw-apply": '<h2>MPW신청</h2><div class="empty-content">MPW 접수 일정과 신청방법은 회차별 모집 공고를 통해 안내합니다. 공정별 참여 조건, 비용 및 제출 규격을 확인해 주세요. PDK와 설계자료의 이용은 파운드리 계약 및 비밀유지 조건에 따릅니다.</div>',
+  "research-results": '<h2>연구개발성과</h2><div class="empty-content">CSDIC의 설계 지원 사례와 연구개발 성과를 소개합니다. 공개 가능한 설계·검증 사례와 기술교류 결과를 순차적으로 안내합니다.</div>',
+  "education-inquiry": '<h2>교육문의</h2><div class="empty-content">교육과정, 참여 대상 및 기업 맞춤형 교육에 관한 문의를 안내합니다. 세부 문의 방법은 센터의 운영 안내에 따라 제공할 예정입니다.</div>',
+  online: '<h2>온라인강의</h2><div class="empty-content">화합물반도체 회로 설계와 EDA 도구 활용을 위한 온라인 강의를 안내합니다. 강의별 공개 범위와 이용방법은 자료 안내를 확인해 주세요.</div>',
+  extracurricular: '<h2>비교과프로그램</h2><div class="empty-content">설계 실습, 전문가 특강 및 프로젝트 활동을 연계한 비교과프로그램을 안내합니다. 운영 일정과 참여 대상은 프로그램별 모집 안내를 통해 확인할 수 있습니다.</div>',
+  "recruit-program": '<h2>채용연계프로그램</h2><div class="empty-content">기업의 직무 수요와 설계교육을 연계하는 프로그램을 추진합니다. 참여기업, 모집 대상 및 운영 일정은 별도 공고를 통해 안내합니다.</div>',
+  "facility-guide": '<h2>시설이용안내</h2><div class="empty-content">설계 연구와 교육을 위한 시설의 이용 대상 및 절차를 안내합니다. 이용 가능 시설과 운영 일정은 센터의 별도 안내를 통해 확인해 주세요.</div>',
+  equipment: '<h2>장비/교육실현황</h2><div class="empty-content">설계교육 및 연구지원에 활용하는 시설과 협력 장비 정보를 안내합니다. 구축 완료된 시설과 이용 가능한 지원 항목을 기준으로 정보를 제공할 예정입니다.</div>',
+  "equipment-apply": '<h2>장비/교육실신청</h2><div class="empty-content">시설별 이용 조건과 신청 절차를 확인해 주세요. 이용 일정과 지원 범위는 센터 운영 안내에 따라 조정됩니다.</div>',
+  results: '<h2>사업성과</h2><div class="empty-content">CSDIC의 설계 지원, MPW 연계, 교육 및 산학협력 성과를 소개합니다. 참여기관과 협의한 공개 범위에 따라 설계·검증 사례와 후속 연구 성과를 안내합니다.</div>',
+  org: '<h2>조직도</h2><div class="empty-content">CSDIC는 센터 운영과 설계·검증 지원, 교육 및 산학협력을 연계하는 운영체계를 마련합니다. 분야별 담당 정보와 협력체계는 센터 운영계획에 따라 안내할 예정입니다.</div>',
   login: '<h2>로그인</h2><div class="empty-content">로그인 기능은 준비 중입니다.</div>',
   join: '<h2>회원가입</h2><div class="empty-content">회원가입 기능은 준비 중입니다.</div>'
 };
