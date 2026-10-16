@@ -67,7 +67,12 @@
     if(imageCount>12 || fileCount>5) throw new Error("TOO_MANY_UPLOADS");
     if(!Object.hasOwn(boards,input.board)||!input.title.trim()||input.title.trim().length>160||input.content.length>30000||!input.author.trim()||input.author.trim().length>40) throw new Error("INVALID_POST");
     if(input.published && ((input.board==="gallery"&&!imageCount)||(!input.content.trim()&&!imageCount&&!fileCount))) throw new Error("EMPTY_POST");
-    for(const upload of imageUploads) await verifyImage(upload.file,upload.ext);
+    for(const upload of imageUploads) {
+      await verifyImage(upload.file,upload.ext);
+      upload.file=await window.CSDICCommunityImage.optimize(upload.file);
+      upload.ext=upload.file.name.split(".").pop().toLowerCase();
+      upload.media_type=types[upload.ext];
+    }
     let id=input.id;
     if(!id) {
       id=crypto.randomUUID();

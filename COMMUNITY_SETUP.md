@@ -6,6 +6,8 @@
 
 홈페이지는 GitHub Pages에서 배포되지만 게시글과 파일은 Supabase의 `community_posts`, `community_assets`, 비공개 `community-assets` 저장소에 보관합니다. SQL 설정은 `supabase/community-posts.sql`에 있고, 사진과 파일 열람 권한은 서버의 RLS 및 Storage 정책에서 매 요청마다 확인합니다. `member-documents`의 승인 회원용 문서 정책은 독립적으로 유지합니다. 게시물 내용은 일반 텍스트로 출력되며 HTML 코드는 실행되지 않습니다.
 
+사진은 업로드 전에 브라우저에서 비율을 유지한 채 긴 변 1,920px 이내로 줄이고 WebP로 압축합니다. 확대하지 않으며 압축본이 원본보다 작을 때만 사용합니다. WebP 저장을 지원하지 않는 브라우저에서는 실제 출력 형식에 맞는 확장자를 사용합니다. 사진 원본은 따로 저장하지 않고, 사진 이외의 첨부파일은 변환하지 않습니다. 기존에 등록한 사진에는 소급 적용되지 않습니다.
+
 글 작성 중 업로드 실패 시 임시 글은 관리자에게만 남습니다. 같은 편집 화면에서 다시 저장할 수 있습니다. 물리 파일 삭제에 실패하면 글을 먼저 비공개로 바꾼 뒤 임시 저장글의 삭제 버튼으로 다시 시도할 수 있습니다.
 
 검증: `npm run test:members && npm run test:community`. 실제 서버에는 `community_posts_four_boards` 마이그레이션을 적용했습니다.

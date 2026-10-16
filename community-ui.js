@@ -59,7 +59,8 @@
       '<label class="member-field">본문<textarea name="content" maxlength="30000" rows="12" placeholder="게시물 내용을 입력하세요">'+esc(p?.content||'')+'</textarea></label>' +
       '<label class="member-check"><input type="checkbox" name="pinned"'+(p?.pinned?' checked':'')+'> 상단 공지로 표시</label>' +
       (images?'<fieldset class="community-existing"><legend>등록한 사진</legend><ul>'+images+'</ul></fieldset>':'')+
-      '<label class="member-field">사진 추가 (JPG·PNG·WebP, 각 5 MB, 최대 12장)<input name="images" type="file" accept=".jpg,.jpeg,.png,.webp" multiple></label>'+
+      '<label class="member-field">사진 추가 (JPG·PNG·WebP, 각 5 MB, 최대 12장)<input name="images" type="file" accept=".jpg,.jpeg,.png,.webp" multiple aria-describedby="communityImageHint"></label>'+
+      '<p id="communityImageHint">사진은 긴 변 1,920px 이내로 자동 압축합니다. 압축한 사진이 원본보다 작을 때만 적용합니다.</p>'+
       (files?'<fieldset class="community-existing"><legend>등록한 첨부파일</legend><ul>'+files+'</ul></fieldset>':'')+
       '<label class="member-field">첨부파일 추가 (PDF·Word·Excel·PowerPoint·TXT·ZIP, 각 20 MB, 최대 5개)<input name="files" type="file" accept=".pdf,.docx,.xlsx,.pptx,.txt,.zip" multiple></label>'+
       '<div class="community-editor-actions"><button class="member-primary" type="submit" data-publish="1">게시하기</button><button class="member-secondary" type="submit" data-publish="0">임시 저장</button><a href="#'+route+'">취소</a></div><p id="communityStatus" role="status" aria-live="polite"></p></form>';
@@ -112,7 +113,7 @@
       .map(a=>({...a,caption:String(data.get("caption-"+a.id)||"").slice(0,200)}));
     const input={id:editId,board:route,title:String(data.get("title")||""),content:String(data.get("content")||""),author:String(data.get("author")||""),date:String(data.get("date")||""),pinned:data.has("pinned"),published:publish,assets:kept,
       images:form.elements.namedItem("images").files,files:form.elements.namedItem("files").files};
-    form.querySelectorAll("button").forEach(b=>b.disabled=true);status("저장하고 있습니다. 사진과 파일이 많으면 잠시 걸립니다.");
+    form.querySelectorAll("button").forEach(b=>b.disabled=true);status("사진을 압축하고 저장하고 있습니다. 사진과 파일이 많으면 잠시 걸립니다.");
     try {
       if(!(await window.CSDICMembers.getPermissions()).isAdmin) throw new Error("ACCESS_DENIED");
       const saved=await service.save(input,id=>{editId=id;});
@@ -120,7 +121,7 @@
       const next=route+'?id='+saved.id+(publish?'':'&drafts=1');
       if(location.hash.slice(1)===next)render(route,next.split("?")[1]);else location.hash=next;
     } catch(error) {
-      if(ticket===generation)status(({INVALID_UPLOAD:"파일 형식과 용량을 확인해 주세요.",INVALID_IMAGE:"사진 파일의 실제 형식을 확인해 주세요.",TOO_MANY_UPLOADS:"사진은 최대 12장, 첨부파일은 최대 5개입니다.",EMPTY_POST:"게시하려면 본문이나 첨부가 필요하며 갤러리는 사진이 필요합니다.",INVALID_POST:"제목·작성자·본문을 확인해 주세요."})[error?.message]||"저장하지 못했습니다. 권한과 연결 상태를 확인한 뒤 다시 시도해 주세요.");
+      if(ticket===generation)status(({INVALID_UPLOAD:"파일 형식과 용량을 확인해 주세요.",INVALID_IMAGE:"사진 파일의 실제 형식을 확인해 주세요.",IMAGE_PROCESSING_FAILED:"사진을 압축하지 못했습니다. 사진 크기를 줄이거나 다른 사진을 선택한 뒤 다시 시도해 주세요.",TOO_MANY_UPLOADS:"사진은 최대 12장, 첨부파일은 최대 5개입니다.",EMPTY_POST:"게시하려면 본문이나 첨부가 필요하며 갤러리는 사진이 필요합니다.",INVALID_POST:"제목·작성자·본문을 확인해 주세요."})[error?.message]||"저장하지 못했습니다. 권한과 연결 상태를 확인한 뒤 다시 시도해 주세요.");
     } finally {if(form.isConnected)form.querySelectorAll("button").forEach(b=>b.disabled=false);}
   });
   page.addEventListener("click",async event=>{
