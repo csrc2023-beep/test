@@ -211,7 +211,7 @@ function visionContent() {
   const strategies = [
     {icon: "people", label: "인력양성", title: "설계 실무교육", points: ["회로 이론과 EDA 실습을 연계한 교육", "MPW 설계 사례를 활용한 프로젝트 교육"]},
     {icon: "building", label: "기술지원", title: "설계·검증 지원", points: ["PDK 기반 회로 및 레이아웃 설계 지원", "DRC/LVS 검토와 측정 결과 분석 지원"]},
-    {icon: "network", label: "인프라 조성", title: "설계환경과 데이터", points: ["EDA 설계환경 및 공동활용 기반 조성", "설계·공정·측정 데이터의 체계적 축적"]},
+    {icon: "network", label: "인프라 조성", title: "설계환경과 데이터", points: ["EDA 설계환경 및 공동활용 기반 조성", "파운드리 : Win-Semi, Wavice"]},
     {icon: "pin", label: "산학연 협력", title: "제작과 사업화 연계", points: ["MOSIS 업무협약과 국내외 협력기관 연계", "기술자문과 후속 연구·사업화 협력"]}
   ];
   return '<div class="vision-overview"><h2>화합물반도체 설계와 구현을 연결하는 지원 거점</h2><p>가천대학교 화합물 반도체설계 지원센터 CSDIC는 대학·연구기관·기업의 설계교육과 검증, MPW 제작 연계를 지원합니다. 모시스(MOSIS)와 업무협약(MOU)을 체결하고 국제협력 기반을 넓혀가고자 합니다.<br><span lang="en">Compound Semiconductor Design and Implementation Center, CSDIC</span></p></div>' +
