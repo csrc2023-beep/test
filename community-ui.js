@@ -48,7 +48,7 @@
     root.querySelectorAll("[data-community-image]").forEach(img=>{if(urls.has(img.dataset.communityImage)) img.src=urls.get(img.dataset.communityImage); else if(observer) observer.observe(img); else image(img.dataset.communityImage,ticket);});
   }
   function assetList(list,kind) {
-    return list.filter(a=>a.kind===kind).map(a=>'<li><label><input type="checkbox" name="keep-' + esc(a.id) + '" checked> 유지: ' + esc(a.original_name) + '</label>' + (kind==="image" ? '<label>사진 설명<input name="caption-' + esc(a.id) + '" value="' + esc(a.caption) + '" maxlength="200"></label>' : '') + '</li>').join("");
+    return list.filter(a=>a.kind===kind).map(a=>'<li><label><input type="checkbox" name="keep-' + esc(a.id) + '" checked> 유지: <span translate="no">' + esc(a.original_name) + '</span></label>' + (kind==="image" ? '<label>사진 설명<input name="caption-' + esc(a.id) + '" value="' + esc(a.caption) + '" maxlength="200"></label>' : '') + '</li>').join("");
   }
   function editor(route, record) {
     const p=record?.post, list=record?.assets||[];

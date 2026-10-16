@@ -90,7 +90,7 @@ function selectNotice(button) {
   });
   const route = {notice: "news", recruit: "recruit", press: "press"}[button.dataset.notice];
   $("#noticeMore").href = "#" + route;
-  $("#noticeMore").setAttribute("aria-label", button.textContent + " 더 보기");
+  $("#noticeMore").setAttribute("aria-label", {notice:"공지사항",recruit:"인재채용",press:"대외홍보"}[button.dataset.notice] + " 더 보기");
 }
 noticeTabs.forEach((button, index) => {
   button.addEventListener("click", () => selectNotice(button));

@@ -104,7 +104,7 @@
     }
   }
   async function removePost(id,title) {
-    if(!window.confirm('“'+title+'” 게시물과 사진·첨부파일을 삭제할까요?\n삭제한 자료는 복구할 수 없습니다.')) return false;
+    if(!window.confirm(window.CSDICLanguage ? window.CSDICLanguage.t('“'+title+'” 게시물과 사진·첨부파일을 삭제할까요?\n삭제한 자료는 복구할 수 없습니다.') : '“'+title+'” 게시물과 사진·첨부파일을 삭제할까요?\n삭제한 자료는 복구할 수 없습니다.')) return false;
     check(await client.from("community_posts").update({published:false}).eq("id",id).select("id").single());
     try {
       await removePaths((await assets(id,true)).map(a=>a.object_path));

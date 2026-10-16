@@ -1,6 +1,6 @@
 {
   "name": "csdic-homepage",
   "private": true,
-  "scripts": {"test:members": "node tests/member-security.mjs && node tests/member-client.cjs && node tests/auth-callback.cjs && node tests/member-document-actions.cjs", "test:community": "node tests/community-security.mjs && node tests/community-render.cjs && node tests/community-image.cjs && node tests/community-upload.cjs"},
+  "scripts": {"test:language": "node tests/language.cjs", "test:members": "node tests/member-security.mjs && node tests/member-client.cjs && node tests/auth-callback.cjs && node tests/member-document-actions.cjs", "test:community": "node tests/community-security.mjs && node tests/community-render.cjs && node tests/community-image.cjs && node tests/community-upload.cjs"},
   "devDependencies": {"@electric-sql/pglite": "0.5.8"}
 }

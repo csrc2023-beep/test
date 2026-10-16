@@ -4,18 +4,20 @@
   <meta charset="UTF-8" />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="translations-en.js?v=20261016-8" defer></script>
+  <script src="language.js?v=20261016-8" defer></script>
   <title>CSDIC | 화합물 반도체설계 지원센터</title>
   <meta name="description" content="가천대학교 화합물 반도체설계 지원센터 CSDIC. 설계교육·검증·MPW 제작 연계와 산학협력 지원 안내." />
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20261016-5" />
+  <link rel="stylesheet" href="styles.css?v=20261016-8" />
 </head>
 <body>
   <a class="skip-link" href="#main">본문 바로가기</a>
   <header class="site-header">
-    <div class="utility-bar"><div class="utility-inner wrap"><a href="#login" data-member-link="login"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="6" cy="4" r="3"/><path d="M0 15V12a6 6 0 0 1 12 0v3zM12 5h4v5h-4z"/></svg>로그인</a><a href="#join" data-member-link="join"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7"/><circle cx="8" cy="5" r="2" fill="white"/><path d="M4 12a4 4 0 0 1 8 0z" fill="white"/></svg>회원가입</a><a href="#resources">회원 자료실</a><a href="#account" id="memberAccountLink" hidden>내 회원정보</a><a href="#member-admin" id="memberAdminLink" hidden>회원 관리</a><button id="memberLogout" type="button" hidden>로그아웃</button></div></div>
+    <div class="utility-bar"><div class="utility-inner wrap"><a href="#login" data-member-link="login"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="6" cy="4" r="3"/><path d="M0 15V12a6 6 0 0 1 12 0v3zM12 5h4v5h-4z"/></svg>로그인</a><a href="#join" data-member-link="join"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7"/><circle cx="8" cy="5" r="2" fill="white"/><path d="M4 12a4 4 0 0 1 8 0z" fill="white"/></svg>회원가입</a><a href="#resources">회원 자료실</a><a href="#account" id="memberAccountLink" hidden>내 회원정보</a><a href="#member-admin" id="memberAdminLink" hidden>회원 관리</a><button id="memberLogout" type="button" hidden>로그아웃</button><div class="language-switch" role="group" aria-label="언어 선택" data-language-switch data-no-translate><button class="language-option" type="button" lang="ko" data-set-language="ko" aria-pressed="true">한국어</button><button class="language-option" type="button" lang="en" data-set-language="en" aria-pressed="false">English</button></div></div></div>
     <div class="nav-shell"><div class="main-nav">
       <a class="brand" href="#home" aria-label="화합물 반도체설계 지원센터 홈"><img src="assets/csdic-logo.svg" width="1265" height="145" alt="CSDIC Compound Semiconductor Design and Implementation Center" /></a>
       <nav class="nav-list" aria-label="주 메뉴"><a class="nav-link" href="#vision" data-menu="about" aria-controls="megaMenu" aria-expanded="false">센터소개</a><a class="nav-link" href="#research" data-menu="research" aria-controls="megaMenu" aria-expanded="false">연구개발</a><a class="nav-link" href="#education" data-menu="education" aria-controls="megaMenu" aria-expanded="false">교육지원</a><a class="nav-link" href="#mpw" data-menu="mpw" aria-controls="megaMenu" aria-expanded="false">MPW</a><a class="nav-link" href="#support" data-menu="support" aria-controls="megaMenu" aria-expanded="false">기업지원</a><a class="nav-link" href="#news" data-menu="community" aria-controls="megaMenu" aria-expanded="false">커뮤니티</a><a class="nav-link" href="#facility" data-menu="facility" aria-controls="megaMenu" aria-expanded="false">시설/장비</a></nav>
@@ -67,7 +69,7 @@
     <section class="page-view inner-page" id="innerPage" hidden aria-labelledby="pageTitle">
       <nav class="breadcrumb wrap" id="breadcrumbNav" aria-label="현재 위치 및 페이지 이동"></nav>
       <div class="page-banner"><p id="pageCategory"></p><h1 id="pageTitle" tabindex="-1"></h1></div>
-      <div class="page-wrap wrap"><nav class="subnav" id="subnav" aria-label="하위 메뉴"></nav><div class="page-content" id="pageContent"></div></div>
+      <div class="page-wrap wrap"><nav class="subnav" id="subnav" aria-label="하위 메뉴"></nav><p id="contentLanguageNote" class="language-note" hidden>게시물과 첨부파일은 등록된 원문 언어로 제공됩니다.</p><div class="page-content" id="pageContent"></div></div>
     </section>
   </main>
   <nav class="quick-float" aria-label="빠른 메뉴"><a href="#education-apply" class="quick q1">교육신청</a><a href="#mpw-apply" class="quick q2">MPW신청</a><a href="#online" class="quick q3">온라인강의</a></nav>
@@ -77,17 +79,17 @@
   <noscript><p class="noscript-message">메뉴별 페이지를 보려면 브라우저에서 자바스크립트를 켜주세요.</p></noscript>
   <script src="notices.js?v=20261012-2"></script>
   <script src="community-data.js?v=20261012-2"></script>
-  <script src="notice-board.js?v=20261012-4"></script>
+  <script src="notice-board.js?v=20261016-8"></script>
   <script src="assets/vendor/supabase-2.117.3.js"></script>
   <script src="member-config.js?v=20261012-2"></script>
   <script src="member-client.js?v=20261012-2"></script>
-  <script src="member-document-actions.js?v=20261012-3"></script>
-  <script src="members.js?v=20261012-4"></script>
+  <script src="member-document-actions.js?v=20261016-8"></script>
+  <script src="members.js?v=20261016-8"></script>
   <script src="community-image.js?v=20261016-3"></script>
-  <script src="community-service.js?v=20261016-3"></script>
-  <script src="community-ui.js?v=20261016-3"></script>
+  <script src="community-service.js?v=20261016-8"></script>
+  <script src="community-ui.js?v=20261016-8"></script>
   <script src="site-content.js?v=20261016-4"></script>
-  <script src="script.js?v=20261016-7"></script>
+  <script src="script.js?v=20261016-8"></script>
   <script src="home-video.js?v=20261012-2"></script>
 </body>
 </html>

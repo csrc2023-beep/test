@@ -3,7 +3,7 @@
   const {client, bucket} = window.CSDICMemberClient;
   async function deleteDocument(id, title) {
     if (!client) throw new Error("MEMBER_SERVICE_UNAVAILABLE");
-    if (!window.confirm('“' + title + '” 문서와 원본 파일을 삭제할까요?\n삭제한 자료는 복구할 수 없습니다.')) return false;
+    if (!window.confirm(window.CSDICLanguage ? window.CSDICLanguage.t('“' + title + '” 문서와 원본 파일을 삭제할까요?\n삭제한 자료는 복구할 수 없습니다.') : '“' + title + '” 문서와 원본 파일을 삭제할까요?\n삭제한 자료는 복구할 수 없습니다.')) return false;
     // Revoke member access before touching the file. RLS allows only a verified admin.
     const hidden = await client.from("member_documents").update({published:false}).eq("id",id).select("id,object_path").single();
     if (hidden.error) throw hidden.error;
