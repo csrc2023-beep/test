@@ -3,7 +3,8 @@ const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 const escapeHTML = value => String(value).replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[char]);
 const centerName = "화합물 반도체설계 지원센터";
-const address = "경기 성남시 수정구 성남대로 1342 가천대학교";
+const address = "경기 성남시 수정구 성남대로 1342 가천대학교 반도체대학";
+const mapPlace = "가천대학교 반도체대학";
 const menuOpen = $("#menuOpen"), menuClose = $("#menuClose"), sideMenu = $("#sideMenu"), backdrop = $("#drawerBackdrop"), megaMenu = $("#megaMenu");
 const navLinks = $$(".nav-link"), megaCols = $$(".mega-col");
 let closeTimer;
@@ -223,7 +224,7 @@ const content = {
   vision: visionContent(),
   ...window.CSDICPageContent.create({lead, card}),
   ui: '<h2>CSDIC</h2><div class="logo-showcase"><img src="assets/csdic-logo.png" width="708" height="105" alt="CSDIC Compound Semiconductor Design and Implementation Center"></div><p>화합물 반도체설계 지원센터 CSDIC는 가천대학교를 기반으로 설계 연구와 교육, MPW 제작 연계를 지원하는 센터입니다.<br>Compound Semiconductor Design and Implementation Center</p>',
-  location: '<div class="address-card"><h2>가천대학교 화합물 반도체설계 지원센터 CSDIC</h2><address>' + address + '</address><div class="location-map"><iframe title="가천대학교 글로벌캠퍼스 위치 지도" src="https://maps.google.com/maps?q=' + encodeURIComponent(address) + '&amp;hl=ko&amp;z=16&amp;output=embed" width="100%" height="450" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div></div>',
+  location: '<div class="address-card"><h2>가천대학교 화합물 반도체설계 지원센터 CSDIC</h2><address>' + address + '</address><div class="location-map"><iframe title="가천대학교 반도체대학 위치 지도" src="https://maps.google.com/maps?q=' + encodeURIComponent(mapPlace) + '&amp;hl=ko&amp;z=17&amp;output=embed" width="100%" height="450" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div></div>',
   login: '<h2>로그인</h2><div class="empty-content">로그인 기능을 불러오고 있습니다.</div>',
   join: '<h2>회원가입</h2><div class="empty-content">회원가입 기능을 불러오고 있습니다.</div>'
 };
