@@ -176,7 +176,8 @@ const businessPrograms = {
   enterprise: {title: "기업지원", points: [
     "기업의 기술 수요에 맞춘 화합물반도체 회로 설계 및 검증 자문",
     "MPW 제작과 패키징·측정 연계를 통한 시제품 검증 지원",
-    "산학연 협력을 통한 후속 연구, 기술이전 및 사업화 연계 추진"
+    "산학연 협력을 통한 후속 연구, 기술이전 및 사업화 연계 추진",
+    "MOSIS 업무협약(MOU)을 바탕으로 설계·제작 국제협력 기반 확대 추진"
   ], heading: "기업지원 분야", items: ["설계 자문", "MPW 제작 연계", "성능 검증 연계", "산학연 협력"]}
 };
 function businessContent(key) {
@@ -220,27 +221,11 @@ function visionContent() {
 }
 const content = {
   vision: visionContent(),
-  research: '<h2>설계와 검증을 연결하는 화합물반도체 기술 지원</h2>' + lead("CSDIC는 화합물반도체 회로의 설계 결과가 제작과 성능 검증으로 이어질 수 있도록 설계 지원체계를 마련합니다. 파운드리 공정 특성을 반영한 설계 검토와 측정 데이터 분석을 통해 참여기관의 연구개발을 지원하고자 합니다.") + '<div class="feature-grid">' + card("RF·MMIC 설계 지원", "GaN·GaAs 기반 고주파·고출력 회로의 시뮬레이션과 레이아웃 설계를 지원하고, 공정 특성에 따른 설계 조건을 검토합니다.") + card("설계 검증 및 모델링", "DRC/LVS 검토와 소자·회로 측정 데이터 분석을 통해 설계 오류를 줄이고, 시뮬레이션과 실제 성능의 차이를 설계 개선에 활용합니다.") + '</div>',
-  education: '<h2>설계 실습과 MPW 경험을 연결하는 교육</h2>' + lead("회로 설계 이론과 EDA 실습을 바탕으로 화합물반도체 설계 역량을 기르는 교육을 추진합니다. 설계 검증과 제작 후 측정 사례를 교육에 반영하여 실제 설계 과정에 필요한 판단과 문제 해결 능력을 높이고자 합니다.") + '<div class="feature-grid">' + card("설계 실무교육", "회로 설계, PDK 활용 및 레이아웃 검증을 다루는 교육과 실습 프로그램을 안내합니다.", "education-apply", "교육신청 안내") + card("온라인 교육자료", "설계 이론과 도구 활용, MPW 설계 사례를 이해하는 데 필요한 교육자료와 강의를 안내합니다.", "online", "온라인강의 보기") + '</div>',
-  mpw: '<h2>설계 결과를 칩 제작으로 연결하는 MPW 지원</h2>' + lead("MPW는 여러 설계를 하나의 웨이퍼 제작에 함께 구성하여 칩 제작 기회를 제공하는 방식입니다. CSDIC는 참여기관의 설계 준비와 검증을 지원하고, 국내외 상용 파운드리와 연계하는 제작 지원체계를 추진합니다. 모시스(MOSIS)와 체결한 업무협약(MOU)을 바탕으로 국제협력 기반도 넓혀가고자 합니다.") + '<div class="feature-grid">' + card("MPW 모집 및 참여", "모집 공고에서 지원 대상, 공정, 제출 자료와 일정을 확인해 주세요. 선정 이후의 설계자료 제공과 제작 절차는 해당 회차 안내에 따릅니다.", "mpw-apply", "신청 안내 보기") + card("설계 준비 및 검증", "파운드리 PDK와 설계 규칙을 바탕으로 회로 및 레이아웃을 검토하고, DRC/LVS 검증과 제출 규격 확인을 지원합니다.", "facility", "EDA Tool 안내") + '</div>',
-  support: '<h2>기업의 설계 과제를 함께 해결하는 협력 지원</h2>' + lead("기업의 화합물반도체 설계 수요를 바탕으로 기술자문과 공동연구를 연계하고, MPW 제작 이후의 패키징·측정·검증을 협력기관과 연결하는 지원체계를 추진합니다.") + '<div class="feature-grid">' + card("설계 기술협력", "회로 설계, 레이아웃 검증 및 성능 분석 등 기업의 기술 과제에 맞춘 자문과 연구협력을 지원합니다.") + card("인력·교육 연계", "기업의 직무 수요를 반영한 설계교육과 산학협력 활동을 연계하여 전문인력의 현장 역량을 높이고자 합니다.", "recruit-program") + '</div>',
-  facility: '<h2>화합물반도체 설계를 위한 EDA 지원 기반</h2>' + lead("회로 시뮬레이션, 레이아웃 설계와 전자기 해석을 위한 EDA 공동활용 환경을 조성하고, 설계 연구와 실무교육을 연결하는 지원 기반을 마련합니다.") + '<div class="feature-grid">' + card("설계환경 이용안내", "지원 가능한 설계 도구와 이용 대상, 신청 절차를 안내합니다. 소프트웨어별 라이선스 조건과 이용 범위는 센터 운영 안내에 따릅니다.", "facility-guide") + card("시설 및 협력 장비 안내", "설계교육 공간과 공동활용 시설을 안내하고, 측정·분석이 필요한 경우 협력기관의 장비와 기술지원을 연계합니다.", "equipment") + '</div>',
+  ...window.CSDICPageContent.create({lead, card}),
   ui: '<h2>CSDIC</h2><div class="logo-showcase"><img src="assets/csdic-logo.png" width="708" height="105" alt="CSDIC Compound Semiconductor Design and Implementation Center"></div><p>화합물 반도체설계 지원센터 CSDIC는 가천대학교를 기반으로 설계 연구와 교육, MPW 제작 연계를 지원하는 센터입니다.<br>Compound Semiconductor Design and Implementation Center</p>',
-  location: '<div class="address-card"><h2>가천대학교 화합물 반도체설계 지원센터 CSDIC</h2><address>' + address + '</address><a class="map-link" href="https://map.naver.com/p/search/' + encodeURIComponent(address) + '" target="_blank" rel="noopener noreferrer">지도에서 위치 보기</a></div>',
-  "education-apply": '<h2>교육신청</h2>' + lead("화합물반도체 설계교육의 일정, 대상 및 신청방법을 안내합니다.") + '<div class="empty-content">교육 일정과 신청방법은 공지사항을 통해 안내합니다. 과정별 교육 내용과 참여 조건을 확인한 뒤 신청해 주세요.</div>',
-  "mpw-apply": '<h2>MPW신청</h2><div class="empty-content">MPW 접수 일정과 신청방법은 회차별 모집 공고를 통해 안내합니다. 공정별 참여 조건, 비용 및 제출 규격을 확인해 주세요. PDK와 설계자료의 이용은 파운드리 계약 및 비밀유지 조건에 따릅니다.</div>',
-  "research-results": '<h2>연구개발성과</h2><div class="empty-content">CSDIC의 설계 지원 사례와 연구개발 성과를 소개합니다. 공개 가능한 설계·검증 사례와 기술교류 결과를 순차적으로 안내합니다.</div>',
-  "education-inquiry": '<h2>교육문의</h2><div class="empty-content">교육과정, 참여 대상 및 기업 맞춤형 교육에 관한 문의를 안내합니다. 세부 문의 방법은 센터의 운영 안내에 따라 제공할 예정입니다.</div>',
-  online: '<h2>온라인강의</h2><div class="empty-content">화합물반도체 회로 설계와 EDA 도구 활용을 위한 온라인 강의를 안내합니다. 강의별 공개 범위와 이용방법은 자료 안내를 확인해 주세요.</div>',
-  extracurricular: '<h2>비교과프로그램</h2><div class="empty-content">설계 실습, 전문가 특강 및 프로젝트 활동을 연계한 비교과프로그램을 안내합니다. 운영 일정과 참여 대상은 프로그램별 모집 안내를 통해 확인할 수 있습니다.</div>',
-  "recruit-program": '<h2>채용연계프로그램</h2><div class="empty-content">기업의 직무 수요와 설계교육을 연계하는 프로그램을 추진합니다. 참여기업, 모집 대상 및 운영 일정은 별도 공고를 통해 안내합니다.</div>',
-  "facility-guide": '<h2>시설이용안내</h2><div class="empty-content">설계 연구와 교육을 위한 시설의 이용 대상 및 절차를 안내합니다. 이용 가능 시설과 운영 일정은 센터의 별도 안내를 통해 확인해 주세요.</div>',
-  equipment: '<h2>장비/교육실현황</h2><div class="empty-content">설계교육 및 연구지원에 활용하는 시설과 협력 장비 정보를 안내합니다. 구축 완료된 시설과 이용 가능한 지원 항목을 기준으로 정보를 제공할 예정입니다.</div>',
-  "equipment-apply": '<h2>장비/교육실신청</h2><div class="empty-content">시설별 이용 조건과 신청 절차를 확인해 주세요. 이용 일정과 지원 범위는 센터 운영 안내에 따라 조정됩니다.</div>',
-  results: '<h2>사업성과</h2><div class="empty-content">CSDIC의 설계 지원, MPW 연계, 교육 및 산학협력 성과를 소개합니다. 참여기관과 협의한 공개 범위에 따라 설계·검증 사례와 후속 연구 성과를 안내합니다.</div>',
-  org: '<h2>조직도</h2><div class="empty-content">CSDIC는 센터 운영과 설계·검증 지원, 교육 및 산학협력을 연계하는 운영체계를 마련합니다. 분야별 담당 정보와 협력체계는 센터 운영계획에 따라 안내할 예정입니다.</div>',
-  login: '<h2>로그인</h2><div class="empty-content">로그인 기능은 준비 중입니다.</div>',
-  join: '<h2>회원가입</h2><div class="empty-content">회원가입 기능은 준비 중입니다.</div>'
+  location: '<div class="address-card"><h2>가천대학교 화합물 반도체설계 지원센터 CSDIC</h2><address>' + address + '</address><p>방문 일정과 이용 시설의 건물·호실은 해당 교육·사업 운영 안내 또는 담당자 안내를 확인해 주세요.</p><a class="map-link" href="https://map.naver.com/p/search/' + encodeURIComponent(address) + '" target="_blank" rel="noopener noreferrer">지도에서 위치 보기</a></div>',
+  login: '<h2>로그인</h2><div class="empty-content">로그인 기능을 불러오고 있습니다.</div>',
+  join: '<h2>회원가입</h2><div class="empty-content">회원가입 기능을 불러오고 있습니다.</div>'
 };
 
 function renderBreadcrumb(page, title) {
