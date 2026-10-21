@@ -575,5 +575,14 @@ window.CSDICEnglish = Object.freeze({
   "가천대학교 반도체대학 위치 지도": "Map of Gachon University College of Semiconductor",
   "가천대학교": "Gachon University",
   "가천대학교 화합물 반도체설계 지원센터 CSDIC. 설계교육·검증·MPW 제작 연계와 산학협력 지원 안내.": "CSDIC at Gachon University: design education, verification, MPW fabrication coordination and industry–university collaboration.",
-  "게시물과 첨부파일은 등록된 원문 언어로 제공됩니다.": "Posts and attached files are provided in their original language."
+  "게시물과 첨부파일은 등록된 원문 언어로 제공됩니다.": "Posts and attached files are provided in their original language.",
+  "로고 조합형": "Logo lockups",
+  "영문 가로형 · 교표": "English horizontal · University seal",
+  "영문 가로형 · 심볼": "English horizontal · University symbol",
+  "영문 조합형 · 교표": "English stacked · University seal",
+  "영문 조합형 · 심볼": "English stacked · University symbol",
+  "국문 상단형 · 심볼": "Korean title above · University symbol",
+  "국문 하단형 · 심볼": "Korean title below · University symbol",
+  "국문 상단형 · 교표": "Korean title above · University seal",
+  "국문 하단형 · 교표": "Korean title below · University seal"
 });

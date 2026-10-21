@@ -177,6 +177,8 @@ html{scroll-behavior:smooth}body{margin:0;color:var(--text);font-family:'Noto Sa
 .language-switch .language-option[aria-pressed=true]{background:#123b9d;border-color:#123b9d;color:#fff}
 .language-switch .language-option:hover{border-color:#123b9d}.callback-language{display:flex;justify-content:flex-end;width:min(1280px,100%);margin:0 auto 16px}
 .language-note{color:#728096;font-size:13px;margin:0 0 20px}
+.ui-logo-variants{margin-top:42px}.ui-logo-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}.ui-logo-card{margin:0;border:1px solid #e2e7ed;background:#fff;overflow:hidden}.ui-logo-card--wide{grid-column:1/-1}.ui-logo-preview{display:flex;align-items:center;justify-content:center;min-height:220px;padding:20px}.ui-logo-preview img{display:block;max-width:100%;width:auto;height:auto;max-height:220px}.ui-logo-card figcaption{padding:13px 18px;border-top:1px solid #e2e7ed;background:#f8f9fb;color:#435063;font-size:14px;line-height:1.6}
+@media(max-width:600px){.ui-logo-variants{margin-top:30px}.ui-logo-grid{grid-template-columns:1fr;gap:18px}.ui-logo-preview{min-height:150px;padding:14px}.ui-logo-preview img{max-height:180px}.ui-logo-card figcaption{padding:11px 14px;font-size:13px}}
 html[lang=en] .nav-link{font-size:18px}html[lang=en] .subnav a{white-space:normal;display:flex;align-items:center;justify-content:center}
 html[lang=en] .quick{font-size:13px;text-align:center;padding:5px;line-height:1.35}
 html[lang=en] .vision-goal h3,html[lang=en] .vision-strategy-body h3{font-size:15px}

@@ -220,10 +220,24 @@ function visionContent() {
     '<section class="vision-section" aria-labelledby="visionGoalsTitle"><h2 id="visionGoalsTitle">[ 목표 ]</h2><p class="vision-statement">설계·검증·MPW 제작 연계를 통한 화합물반도체 설계 지원체계 구축</p><div class="vision-goals">' + goals.map(([title, detail]) => '<article class="vision-goal"><h3>' + title + '</h3><p>(' + detail + ')</p></article>').join("") + '</div></section>' +
     '<section class="vision-section" aria-labelledby="visionStrategyTitle"><h2 id="visionStrategyTitle">[ 추진전략 ]</h2><p class="vision-statement">설계 경험과 검증 데이터를 축적하는 산학연 협력 기반 조성</p><div class="vision-strategies">' + strategies.map(item => '<article class="vision-strategy"><div class="vision-strategy-label"><svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">' + icons[item.icon] + '</svg><span>' + item.label + '</span></div><div class="vision-strategy-body"><h3>' + item.title + '</h3><ul>' + item.points.map(point => '<li>' + point + '</li>').join("") + '</ul></div></article>').join("") + '</div></section>';
 }
+function uiContent() {
+  const variants = [
+    ["en-seal-horizontal", "영문 가로형 · 교표", 1707, 351],
+    ["en-symbol-horizontal", "영문 가로형 · 심볼", 1679, 351],
+    ["en-seal-stacked", "영문 조합형 · 교표", 932, 355],
+    ["en-symbol-stacked", "영문 조합형 · 심볼", 855, 353],
+    ["ko-symbol-top", "국문 상단형 · 심볼", 906, 351],
+    ["ko-symbol-bottom", "국문 하단형 · 심볼", 851, 351],
+    ["ko-seal-top", "국문 상단형 · 교표", 911, 351],
+    ["ko-seal-bottom", "국문 하단형 · 교표", 816, 351]
+  ];
+  const gallery = variants.map(([name, label, width, height], index) => '<figure class="ui-logo-card' + (index < 2 ? ' ui-logo-card--wide' : '') + '"><div class="ui-logo-preview"><img src="assets/csdic-lockup-' + name + '.webp" width="' + width + '" height="' + height + '" alt="' + label + '" loading="lazy" decoding="async"></div><figcaption>' + label + '</figcaption></figure>').join("");
+  return '<h2>CSDIC</h2><div class="logo-showcase"><img src="assets/csdic-logo.svg" width="1265" height="145" alt="CSDIC Compound Semiconductor Design and Implementation Center"></div><p>화합물 반도체설계 지원센터 CSDIC는 가천대학교를 기반으로 설계 연구와 교육, MPW 제작 연계를 지원하는 센터입니다.<br>Compound Semiconductor Design and Implementation Center</p><section class="ui-logo-variants" aria-labelledby="uiLogoVariantsTitle"><h2 id="uiLogoVariantsTitle">로고 조합형</h2><div class="ui-logo-grid">' + gallery + '</div></section>';
+}
 const content = {
   vision: visionContent(),
   ...window.CSDICPageContent.create({lead, card}),
-  ui: '<h2>CSDIC</h2><div class="logo-showcase"><img src="assets/csdic-logo.svg" width="1265" height="145" alt="CSDIC Compound Semiconductor Design and Implementation Center"></div><p>화합물 반도체설계 지원센터 CSDIC는 가천대학교를 기반으로 설계 연구와 교육, MPW 제작 연계를 지원하는 센터입니다.<br>Compound Semiconductor Design and Implementation Center</p>',
+  ui: uiContent(),
   location: '<div class="address-card"><h2>가천대학교 화합물 반도체설계 지원센터 CSDIC</h2><address>' + address + '</address><div class="location-map"><iframe title="가천대학교 반도체대학 위치 지도" src="https://maps.google.com/maps?q=' + encodeURIComponent(mapPlace) + '&amp;hl=ko&amp;z=17&amp;output=embed" width="100%" height="450" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div></div>',
   login: '<h2>로그인</h2><div class="empty-content">로그인 기능을 불러오고 있습니다.</div>',
   join: '<h2>회원가입</h2><div class="empty-content">회원가입 기능을 불러오고 있습니다.</div>'
