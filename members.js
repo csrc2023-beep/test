@@ -4,7 +4,7 @@
   const accountRoutes = new Set(["login", "join", "reset", "account", "resources", "member-admin"]);
   const esc = value => String(value ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]);
   const page = document.getElementById("pageContent");
-  let user = null, membership = null, view = 0, identity = 0, documents = new Map(), objectUrls = new Set();
+  let user = null, membership = null, view = 0, identity = 0, documents = new Map(), objectUrls = new Set(), viewerReady = false;
   const currentRoute = () => location.hash.slice(1).split("?")[0] || "home";
   const readyNotice = () => configured ? "" : '<div class="member-service-note" role="status">회원 서비스 연결을 준비 중입니다. 연결이 완료되면 가입과 로그인을 이용할 수 있습니다.</div>';
   const disabled = () => configured ? "" : " disabled";
@@ -33,6 +33,8 @@
     document.getElementById("memberAccountLink").hidden = !user;
     document.getElementById("memberAdminLink").hidden = !isAdmin();
     document.getElementById("memberLogout").hidden = !user;
+    viewerReady = true;
+    window.dispatchEvent(new Event("csdic:viewerchange"));
   }
   async function refresh() {
     const request = ++identity;
@@ -201,7 +203,7 @@
     finally {if (button.isConnected) button.disabled = false;}
   });
   document.getElementById("memberLogout").addEventListener("click", logout);
-  window.CSDICMembers = Object.freeze({render, routes: accountRoutes, async getPermissions() {await refresh(); return {isAdmin:isAdmin(),userId:user?.id || null};}});
+  window.CSDICMembers = Object.freeze({render, routes: accountRoutes, getViewerState:() => ({ready:viewerReady,signedIn:Boolean(user)}), async getPermissions() {await refresh(); return {isAdmin:isAdmin(),userId:user?.id || null};}});
   refresh().then(() => {if (accountRoutes.has(currentRoute())) render(currentRoute());}).catch(() => updateHeader());
   if (client) client.auth.onAuthStateChange(() => {
     // Do not call Auth APIs inside its synchronous event callback.
