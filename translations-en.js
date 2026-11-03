@@ -584,5 +584,12 @@ window.CSDICEnglish = Object.freeze({
   "국문 상단형 · 심볼": "Korean title above · University symbol",
   "국문 하단형 · 심볼": "Korean title below · University symbol",
   "국문 상단형 · 교표": "Korean title above · University seal",
-  "국문 하단형 · 교표": "Korean title below · University seal"
+  "국문 하단형 · 교표": "Korean title below · University seal",
+  "행사 안내": "Event notice",
+  "행사 안내 닫기": "Close event notice",
+  "행사 포스터 원본 PDF 새 창에서 보기": "Open the original event poster PDF in a new tab",
+  "제2회 Beyond Silicon 2026 화합물반도체 미래를 여는 길. 2026년 11월 19~20일, 한국나노기술원 1층. 신청 마감 11월 16일 오후 6시.": "The 2nd Beyond Silicon 2026: Compound Semiconductors, Opening the Way to the Future. November 19–20, 2026, 1st floor of Korea Advanced Nano Fab Center. Registration closes November 16 at 6 p.m. KST.",
+  "원본 크게 보기 ↗": "View full-size PDF ↗",
+  "오늘 하루 보지 않기": "Do not show again today",
+  "닫기": "Close"
 });
