@@ -26,6 +26,7 @@
 
 ## 외부 회원이 시청할 수 있도록 연결
 
+- 현재 사용하는 Windows PC에서 계속 영상을 제공하려면 [HTTPS 중계 서버 연결 안내](relay/README.md)를 따릅니다.
 - 홈페이지는 `https://video.csdic.co.kr`의 강의 서버에 연결하도록 구성되어 있습니다. 영상 전달을 지원하는 HTTPS 프록시를 통해 이 도메인을 운영 PC의 `http://127.0.0.1:8010`으로 연결합니다. 기존 홈페이지와 메일 DNS는 그대로 두고 영상용 호스트만 추가합니다. 예전 `trycloudflare.com` 임시 주소는 사용하지 않습니다.
 - 프록시는 `/api/health`, `/api/session`, `/api/lectures` 및 하위 파일 경로를 전달해야 합니다. CORS 요청과 응답, `Authorization`, `Cookie`, `Set-Cookie`, `Range`, HTTP 206을 그대로 전달하고 영상 API 및 이미지에는 캐시를 사용하지 않습니다. 앱은 `https://csdic.co.kr`과 `https://www.csdic.co.kr`에만 자격 증명이 포함된 브라우저 요청을 허용합니다. 영상 호스트에는 별도 Cloudflare 이메일 PIN을 추가하지 않습니다.
 - PC와 영상 서버가 켜져 있어야 합니다. 승인된 계정으로 모바일 데이터에서 썸네일과 영상 재생·탐색을 확인하고, 로그아웃 또는 승인 대기 계정에서는 같은 주소로도 영상이 열리지 않는지 확인합니다.

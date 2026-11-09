@@ -1,0 +1,14 @@
+# Append at the end of the relay's sshd_config. This block is for one account only.
+Match User csdic-relay
+    AuthenticationMethods publickey
+    PasswordAuthentication no
+    KbdInteractiveAuthentication no
+    AllowTcpForwarding remote
+    AllowStreamLocalForwarding no
+    PermitListen 127.0.0.1:18010
+    GatewayPorts no
+    AllowAgentForwarding no
+    X11Forwarding no
+    PermitTunnel no
+    PermitUserRC no
+    MaxSessions 0

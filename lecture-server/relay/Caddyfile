@@ -1,0 +1,9 @@
+video.csdic.co.kr {
+	@lecture_api path /api/health /api/session /api/lectures /api/lectures/*
+	handle @lecture_api {
+		reverse_proxy 127.0.0.1:18010
+	}
+	handle {
+		respond 404
+	}
+}
