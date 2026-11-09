@@ -24,6 +24,7 @@
   const canRead = () => Boolean(user?.email_confirmed_at && membership?.status === "approved");
   const isAdmin = () => canRead() && membership.role === "admin";
   function clearFiles() {
+    window.CSDICMemberLectures?.unmount();
     objectUrls.forEach(url => URL.revokeObjectURL(url));
     objectUrls.clear(); documents.clear();
   }
@@ -87,7 +88,10 @@
       if (result.error) throw result.error;
       if (ticket !== view) return;
       result.data.forEach(doc => documents.set(doc.id, doc));
-      page.innerHTML = title("회원 자료실", "현재 계정에 열람 권한이 있는 문서만 표시됩니다.") + '<div class="member-document-list">' + (result.data.length ? result.data.map(doc => '<article class="member-document"><div><h3>' + esc(doc.title) + '</h3><p>' + esc(doc.description) + '</p><small>' + esc(doc.original_name) + ' · ' + Math.ceil(doc.size_bytes / 1024) + ' KB</small></div><div class="member-actions">' + (doc.media_type === "application/pdf" ? '<button class="member-secondary" data-document="' + esc(doc.id) + '" data-open>PDF 열람</button>' : "") + '<button class="member-primary" data-document="' + esc(doc.id) + '">다운로드</button></div></article>').join("") : '<div class="empty-content">이용할 수 있는 문서가 없습니다.</div>') + '</div>' + statusLine;
+      page.innerHTML = title("회원 자료실", "현재 계정에 열람 권한이 있는 자료만 표시됩니다.") +
+        '<section class="member-lecture-section" aria-labelledby="memberLecturesHeading"><h3 id="memberLecturesHeading" class="member-library-subtitle">강의 영상</h3><div id="memberLectureCatalog"><p class="empty-content member-lecture-status">강의 영상을 준비 중입니다.</p></div></section>' +
+        '<section aria-labelledby="memberDocumentsHeading"><h3 id="memberDocumentsHeading" class="member-library-subtitle">문서 자료</h3><div class="member-document-list">' + (result.data.length ? result.data.map(doc => '<article class="member-document"><div><h3>' + esc(doc.title) + '</h3><p>' + esc(doc.description) + '</p><small>' + esc(doc.original_name) + ' · ' + Math.ceil(doc.size_bytes / 1024) + ' KB</small></div><div class="member-actions">' + (doc.media_type === "application/pdf" ? '<button class="member-secondary" data-document="' + esc(doc.id) + '" data-open>PDF 열람</button>' : "") + '<button class="member-primary" data-document="' + esc(doc.id) + '">다운로드</button></div></article>').join("") : '<div class="empty-content">이용할 수 있는 문서가 없습니다.</div>') + '</div></section>' + statusLine;
+      window.CSDICMemberLectures?.mount(document.getElementById("memberLectureCatalog"), client, user.id);
     } catch {if (ticket === view) page.innerHTML = '<div class="member-card">' + title("연결을 확인해 주세요", "회원 정보를 확인하지 못했습니다. 새로고침하거나 다시 로그인해 주세요.") + '<a href="#login">로그인으로 이동</a></div>';}
   }
   async function renderAdmin(ticket) {
@@ -98,6 +102,7 @@
   }
   async function logout() {
     ++identity; ++view; clearFiles();
+    window.CSDICMemberLectures?.disconnect();
     if (client) await client.auth.signOut({scope: "local"});
     user = membership = null; updateHeader(); location.hash = "login";
     if (currentRoute() === "login") render("login");
@@ -205,7 +210,11 @@
   document.getElementById("memberLogout").addEventListener("click", logout);
   window.CSDICMembers = Object.freeze({render, routes: accountRoutes, getViewerState:() => ({ready:viewerReady,signedIn:Boolean(user)}), async getPermissions() {await refresh(); return {isAdmin:isAdmin(),userId:user?.id || null};}});
   refresh().then(() => {if (accountRoutes.has(currentRoute())) render(currentRoute());}).catch(() => updateHeader());
-  if (client) client.auth.onAuthStateChange(() => {
+  if (client) client.auth.onAuthStateChange((event, session) => {
+    if (event === "SIGNED_OUT") window.CSDICMemberLectures?.disconnect();
+    // Token refresh and tab refocus must not interrupt an active lecture for the same user.
+    if (currentRoute() === "resources" && user && session?.user?.id === user.id &&
+        (event === "TOKEN_REFRESHED" || event === "SIGNED_IN")) return;
     // Do not call Auth APIs inside its synchronous event callback.
     setTimeout(() => refresh().then(() => {if (accountRoutes.has(currentRoute())) render(currentRoute());}).catch(() => updateHeader()),0);
   });
